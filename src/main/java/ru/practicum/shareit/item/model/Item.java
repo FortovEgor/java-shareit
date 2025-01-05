@@ -8,7 +8,7 @@ import ru.practicum.shareit.user.User;
  * TODO Sprint add-controllers.
  */
 public class Item {
-    private Long id;
+    private Long id;  // для совместимости с большими значениями, генерируемыми SERIAL
 
     @NotBlank
     private String name;
