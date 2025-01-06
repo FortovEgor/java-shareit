@@ -1,6 +1,14 @@
 package ru.practicum.shareit.user;
 
-public class UserMapper {
-    // @TODO: toUserDto(User user)
-    // @TODO: toUser(UserDto userDto)
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import ru.practicum.shareit.user.dto.CreateUserRequest;
+import ru.practicum.shareit.user.dto.UserDto;
+
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface UserMapper {
+
+    UserDto toDto(User user);
+
+    User toUser(CreateUserRequest request);
 }
