@@ -22,8 +22,7 @@ public class Item {
 
     @NotBlank
     private String description;
-
-    private boolean isAvailable;
+    private boolean available;
     private User owner;
     private ItemRequest request;
 }
