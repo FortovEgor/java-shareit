@@ -16,6 +16,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 @RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
+
     private final UserService userService;
     private final UserMapper userMapper;
 

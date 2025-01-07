@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dao.UserRepo;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Validated
 @RequiredArgsConstructor  // for DI
 public class UserService {
     private final UserRepo repo;
