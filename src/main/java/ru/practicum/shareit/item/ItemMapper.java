@@ -1,17 +1,19 @@
 package ru.practicum.shareit.item;
 
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
-public class ItemMapper {
-    public static ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.isAvailable())
-                .build();
-    }
+import java.util.List;
 
-    // @TODO: toItem(ItemDto itemDto)
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+public interface ItemMapper {
+
+    ItemDto toDto(Item item);
+
+    List<ItemDto> toDto(List<Item> item);
+
+    Item toItem(CreateItemRequest request);
 }

@@ -12,8 +12,8 @@ import ru.practicum.shareit.user.dto.UpdateUserRequest;
 
 import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor  // for DI
 public class UserService {
     private final UserRepo repo;
