@@ -19,6 +19,7 @@ public class UserRepoTest {
     @BeforeEach
     void setup() {
         userRepo = new UserRepoImpl();
+        log.info("Running test");
     }
 
     @Test
