@@ -20,21 +20,21 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
+    public UserDto createUser(@RequestBody CreateUserRequest request) {
         User user = userService.createUser(request);
-        return new ResponseEntity<>(userMapper.toDto(user), HttpStatus.CREATED);
+        return userMapper.toDto(user);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+    public UserDto getUserById(@PathVariable Long userId) {
         User user = userService.getUserById(userId);
-        return ResponseEntity.ok().body(userMapper.toDto(user));
+        return userMapper.toDto(user);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest request) {
+    public UserDto updateUser(@PathVariable Long userId, @RequestBody UpdateUserRequest request) {
         User user = userService.updateUser(userId, request);
-        return ResponseEntity.ok().body(userMapper.toDto(user));
+        return userMapper.toDto(user);
     }
 
     @DeleteMapping("/{userId}")
