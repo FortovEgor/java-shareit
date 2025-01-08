@@ -11,8 +11,6 @@ import ru.practicum.shareit.user.dao.UserRepo;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 @Validated
