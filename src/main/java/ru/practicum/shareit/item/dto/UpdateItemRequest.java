@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import ru.practicum.shareit.validator.NullOrNotEmpty;
 
