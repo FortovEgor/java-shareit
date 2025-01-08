@@ -12,6 +12,7 @@ import java.util.Optional;
 public class ItemRepoImpl implements ItemRepo {
     private Map<Long, Item> items = new HashMap<>();
     private long counter = 0;  // Invariant: only increases; needed for generating item id
+
     @Override
     public Item save(Item item) {
         if (item.getId() == null) {
