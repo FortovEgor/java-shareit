@@ -38,6 +38,13 @@ public class UserRepoImpl implements UserRepo {
     }
 
     @Override
+    public boolean existsByEmail(String email) {
+        return users.values().stream()
+                .anyMatch(user ->
+                    user.getEmail().equals(email));
+    }
+
+    @Override
     public void deleteById(long userId) {
         users.remove(userId);
     }

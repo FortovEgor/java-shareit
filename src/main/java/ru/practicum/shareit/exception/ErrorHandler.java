@@ -9,6 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,5 +49,16 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(new ErrorResponse("Ошибка валидации", description),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    // Обработка всех остальных исключений
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllExceptions(Exception e) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("Внутренние ошибки сервера", e.getMessage());
+
+        log.error(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }
 }

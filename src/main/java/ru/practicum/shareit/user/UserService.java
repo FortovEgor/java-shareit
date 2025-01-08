@@ -30,8 +30,7 @@ public class UserService {
     }
 
     private void checkEmail(String email) {
-        Optional<User> existingUser = repo.getByEmail(email);
-        if (existingUser.isPresent()) {
+        if (repo.existsByEmail(email)) {
             throw new ConflictException("пользователь с почтой %s уже зарегистрирован", email);
         }
     }
