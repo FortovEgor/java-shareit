@@ -24,14 +24,14 @@ public class ItemService {
     private final ItemRepo repo;
     private final ItemMapper itemMapper;
 
-    public Item createItem(@Valid CreateItemRequest request, Long userId) {
+    public Item createItem(@Valid CreateItemRequest request, Long userId) throws NotFoundException {
         User owner = userService.getUserById(userId);
         Item item = itemMapper.toItem(request);
         item.setOwner(owner);
         return repo.save(item);
     }
 
-    public Item updateItem(@Valid UpdateItemRequest request, Long itemId, Long userId) {
+    public Item updateItem(@Valid UpdateItemRequest request, Long itemId, Long userId) throws ForbiddenException, NotFoundException {
         Item item = getItemById(itemId);
         User owner = userService.getUserById(userId);
 
@@ -59,7 +59,7 @@ public class ItemService {
         return repo.save(item);
     }
 
-    public Item getItemById(Long itemId) {
+    public Item getItemById(Long itemId) throws NotFoundException {
         return repo.getItemById(itemId)
                 .orElseThrow(() -> new NotFoundException("не найдена вещь с id = %s", itemId));
     }

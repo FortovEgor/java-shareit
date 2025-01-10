@@ -11,6 +11,8 @@ import ru.practicum.shareit.user.dao.UserRepo;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 @Slf4j
 @Service
 @Validated
@@ -19,7 +21,7 @@ public class UserService {
     private final UserRepo repo;
     private final UserMapper userMapper;
 
-    public User createUser(@Valid CreateUserRequest request) {
+    public User createUser(@Valid CreateUserRequest request) throws ConflictException {
         log.info("Creating user {}", request);
         checkEmail(request.getEmail());
         User user = userMapper.toUser(request);
@@ -27,18 +29,18 @@ public class UserService {
         return repo.save(user);
     }
 
-    private void checkEmail(String email) {
+    private void checkEmail(String email) throws ConflictException {
         if (repo.existsByEmail(email)) {
             throw new ConflictException("пользователь с почтой %s уже зарегистрирован", email);
         }
     }
 
-    public User getUserById(Long userId) {
+    public User getUserById(Long userId) throws NotFoundException {
         return repo.getById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с userId = %d", userId));
     }
 
-    public User updateUser(Long userId, UpdateUserRequest request) {
+    public User updateUser(Long userId, UpdateUserRequest request) throws ConflictException, NotFoundException {
         log.info("Updating user with id = {} with {}", userId, request);
         User user = getUserById(userId);
         log.info("User with id = {} found");
@@ -63,12 +65,16 @@ public class UserService {
         repo.deleteById(userId);
     }
 
-    private void checkEmailUniqueness(long userId, String email) {
+    private void checkEmailUniqueness(long userId, String email) throws ConflictException {
+        AtomicBoolean throwException = new AtomicBoolean(false);
         repo.getByEmail(email)
                 .ifPresent(existingUser -> {
                     if (!existingUser.getId().equals(userId)) {
-                        throw new ConflictException("Пользователь с почтой %s уже зарегистрирован", email);
+                        throwException.set(true);
                     }
                 });
+        if (throwException.get()) {
+            throw new ConflictException("Пользователь с почтой %s уже зарегистрирован", email);
+        }
     }
 }

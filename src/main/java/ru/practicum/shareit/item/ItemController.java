@@ -2,6 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.ForbiddenException;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
@@ -22,7 +24,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto createItem(@RequestBody CreateItemRequest request,
-                                              @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                              @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
         Item item = itemService.createItem(request, userId);
         return itemMapper.toDto(item);
     }
@@ -30,13 +32,13 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestBody UpdateItemRequest request,
                                               @PathVariable Long itemId,
-                                              @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                              @RequestHeader("X-Sharer-User-Id") Long userId) throws ForbiddenException, NotFoundException {
         Item item = itemService.updateItem(request, itemId, userId);
         return itemMapper.toDto(item);
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemById(@PathVariable Long itemId) {
+    public ItemDto getItemById(@PathVariable Long itemId) throws NotFoundException {
         Item item = itemService.getItemById(itemId);
         return itemMapper.toDto(item);
     }
