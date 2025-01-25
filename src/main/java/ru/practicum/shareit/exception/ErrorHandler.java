@@ -61,4 +61,16 @@ public class ErrorHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errors);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException e) {
+        return new ResponseEntity<>(new ErrorResponse("Ошибка доступа", e.getMessage()),
+                HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleForbidden(BadRequest e) {
+        return new ResponseEntity<>(new ErrorResponse("Некорректный запрос", e.getMessage()),
+                HttpStatus.BAD_REQUEST);
+    }
 }
