@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dao.ItemRepo;
+import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemService {
 
     private final UserService userService;
-    private final ItemRepo repo;
+    private final ItemRepository repo;
     private final ItemMapper itemMapper;
 
     public Item createItem(@Valid CreateItemRequest request, Long userId) throws NotFoundException {
@@ -60,15 +60,18 @@ public class ItemService {
     }
 
     public Item getItemById(Long itemId) throws NotFoundException {
-        return repo.getItemById(itemId)
+        return repo.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("не найдена вещь с id = %s", itemId));
     }
 
     public List<Item> getItemsByUserId(Long userId) {
-        return repo.getByUserId(userId);
+        return repo.findAllByOwnerId(userId);
     }
 
     public List<Item> search(String searchString) {
+        if (searchString == null || searchString.isBlank()) {
+            return List.of();
+        }
         return repo.search(searchString);
     }
 }

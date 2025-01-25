@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dao.UserRepo;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Validated
 @RequiredArgsConstructor  // for DI
 public class UserService {
-    private final UserRepo repo;
+    private final UserRepository repo;
     private final UserMapper userMapper;
 
     public User createUser(@Valid CreateUserRequest request) throws ConflictException {
@@ -30,13 +31,14 @@ public class UserService {
     }
 
     private void checkEmail(String email) throws ConflictException {
-        if (repo.existsByEmail(email)) {
+        Optional<User> existingUser = repo.findByEmail(email);
+        if (existingUser.isPresent()) {
             throw new ConflictException("пользователь с почтой %s уже зарегистрирован", email);
         }
     }
 
     public User getUserById(Long userId) throws NotFoundException {
-        return repo.getById(userId)
+        return repo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с userId = %d", userId));
     }
 
@@ -67,7 +69,7 @@ public class UserService {
 
     private void checkEmailUniqueness(long userId, String email) throws ConflictException {
         AtomicBoolean throwException = new AtomicBoolean(false);
-        repo.getByEmail(email)
+        repo.findByEmail(email)
                 .ifPresent(existingUser -> {
                     if (!existingUser.getId().equals(userId)) {
                         throwException.set(true);
