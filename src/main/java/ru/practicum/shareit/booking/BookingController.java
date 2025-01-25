@@ -38,4 +38,11 @@ public class BookingController {
         Booking booking = bookingService.approveBooking(bookingId, approved, userId);
         return mapper.toDto(booking);
     }
+
+    @GetMapping("/{bookingId}")
+    public BookingDto getBooking(@PathVariable Long bookingId,
+                                 @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) throws ForbiddenException, NotFoundException {
+        Booking booking = bookingService.getById(bookingId, userId);
+        return mapper.toDto(booking);
+    }
 }

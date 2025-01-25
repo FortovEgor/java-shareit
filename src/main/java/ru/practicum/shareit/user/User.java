@@ -15,6 +15,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@EqualsAndHashCode(of = {"id"})  // for fast & correct comparison
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -71,4 +71,15 @@ public class BookingService {
         log.info("У вещи с id = {} поменялся статус на {}", bookingId, booking.getStatus());
         return booking;
     }
+
+    public Booking getById(long bookingId, long userId) throws NotFoundException, ForbiddenException {
+        log.info("getting booking by id");
+        Booking booking = repo.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Не удалось найти бронирование с id = %d", bookingId));
+        if (userId != booking.getBooker().getId() && userId != booking.getItem().getOwner().getId()) {
+            throw new ForbiddenException("Пользователь с id = {} не может посмотреть бронирование с id = {}", userId, bookingId);
+        }
+
+       return booking;
+    }
 }
