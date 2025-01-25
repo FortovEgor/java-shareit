@@ -8,3 +8,5 @@ docker-compose up
 ```
 Make sure you have Docker & docker-compose installed on your system.
 
+Схема БД:
+![img.png](CurrentDatabaseSchema.png)
