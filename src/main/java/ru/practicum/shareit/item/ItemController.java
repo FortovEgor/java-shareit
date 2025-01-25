@@ -39,7 +39,7 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@PathVariable Long itemId) throws NotFoundException {
-        Item item = itemService.getItemById(itemId);
+        Item item = itemService.getById(itemId);
         return itemMapper.toDto(item);
     }
 

@@ -37,14 +37,14 @@ public class UserService {
         }
     }
 
-    public User getUserById(Long userId) throws NotFoundException {
+    public User getById(Long userId) throws NotFoundException {
         return repo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с userId = %d", userId));
     }
 
     public User updateUser(Long userId, UpdateUserRequest request) throws ConflictException, NotFoundException {
         log.info("Updating user with id = {} with {}", userId, request);
-        User user = getUserById(userId);
+        User user = getById(userId);
         log.info("User with id = {} found");
 
         String newName = request.getName();

@@ -25,15 +25,15 @@ public class ItemService {
     private final ItemMapper itemMapper;
 
     public Item createItem(@Valid CreateItemRequest request, Long userId) throws NotFoundException {
-        User owner = userService.getUserById(userId);
+        User owner = userService.getById(userId);
         Item item = itemMapper.toItem(request);
         item.setOwner(owner);
         return repo.save(item);
     }
 
     public Item updateItem(@Valid UpdateItemRequest request, Long itemId, Long userId) throws ForbiddenException, NotFoundException {
-        Item item = getItemById(itemId);
-        User owner = userService.getUserById(userId);
+        Item item = getById(itemId);
+        User owner = userService.getById(userId);
 
         // проверка что только автор может ее менять
         if (!item.getOwner().getId().equals(owner.getId())) {
@@ -59,7 +59,7 @@ public class ItemService {
         return repo.save(item);
     }
 
-    public Item getItemById(Long itemId) throws NotFoundException {
+    public Item getById(Long itemId) throws NotFoundException {
         return repo.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("не найдена вещь с id = %s", itemId));
     }

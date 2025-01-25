@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS bookings (
     book_end TIMESTAMP NOT NULL,
     item_id BIGINT NOT NULL,
     booker_id BIGINT NOT NULL,
-    book_status BOOK_STATUSES NOT NULL,
+    book_status VARCHAR NOT NULL,
 
     CONSTRAINT fk_bookings_item_id
         FOREIGN KEY(item_id)
