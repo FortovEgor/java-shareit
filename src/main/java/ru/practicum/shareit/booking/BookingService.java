@@ -15,6 +15,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.User;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -81,5 +83,27 @@ public class BookingService {
         }
 
        return booking;
+    }
+
+    List<Booking> getUserBookings(String stateValue, long userId) throws NotFoundException {
+        log.info("getting bookings for user {} with state {}", userId, stateValue);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        FilterBookingState state = FilterBookingState.valueOf(stateValue);
+        User user = userService.getById(userId);
+
+        List<Booking> bookings = switch(state) {
+            case ALL -> repo.findAllByBookerOrderByStartAsc(user);
+            case CURRENT -> repo.findAllByBookerAndStartBeforeAndEndAfterOrderByStartAsc(user, now, now);
+            case PAST -> repo.findAllByBookerAndEndBeforeOrderByStartAsc(user, now);
+            case FUTURE -> repo.findAllByBookerAndStartAfterOrderByStartAsc(user, now);
+            case WAITING -> repo.findAllByBookerAndStatusOrderByStartAsc(user, BookingStatus.WAITING);
+            case REJECTED -> repo.findAllByBookerAndStatusOrderByStartAsc(user, BookingStatus.REJECTED);
+        };
+
+        log.info("found {} booking(s)", bookings.size());
+
+        return bookings;
     }
 }

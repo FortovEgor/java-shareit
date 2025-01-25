@@ -11,6 +11,8 @@ import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 
+import java.util.List;
+
 /**
  * TODO Sprint add-bookings.
  */
@@ -44,5 +46,12 @@ public class BookingController {
                                  @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) throws ForbiddenException, NotFoundException {
         Booking booking = bookingService.getById(bookingId, userId);
         return mapper.toDto(booking);
+    }
+
+    @GetMapping()
+    public List<BookingDto> getCurrentUserBookings(@RequestParam(required = false, defaultValue = "ALL") String stateValue,
+                                                   @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
+        List<Booking> bookings = bookingService.getUserBookings(stateValue, userId);
+        return mapper.toDto(bookings);
     }
 }
