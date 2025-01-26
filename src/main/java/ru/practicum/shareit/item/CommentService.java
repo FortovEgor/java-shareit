@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingService;
+import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.CommentRepository;
@@ -24,7 +25,7 @@ public class CommentService {
     private final ItemMapper itemMapper;
     private final CommentRepository commentRepository;
 
-    public Comment createComment(@Valid CreateCommentRequest request, Long itemId, Long userId) throws NotFoundException, ForbiddenException {
+    public Comment createComment(@Valid CreateCommentRequest request, Long itemId, Long userId) throws NotFoundException, BadRequest {
 
         Item item = itemService.getById(itemId);
         User user = userService.getById(userId);
@@ -33,7 +34,7 @@ public class CommentService {
         log.info("user = {}", user);
 
         if (!bookingService.existPastApprovedItemBookingByUser(item, user)) {
-            throw new ForbiddenException("запрещено оставлять комментарий для вещи %s пользователем %s",
+            throw new BadRequest("запрещено оставлять комментарий для вещи %s пользователем %s",
                     itemId, userId);
         }
 

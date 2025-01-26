@@ -17,7 +17,6 @@ import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -130,6 +129,6 @@ public class BookingService {
     }
 
     public boolean existPastApprovedItemBookingByUser(Item item, User user) {
-        return repo.existsByItemAndBookerAndStatus(item, user, BookingStatus.APPROVED);
+        return repo.existsByItemAndBookerAndStatusAndEndBefore(item, user, BookingStatus.APPROVED, LocalDateTime.now());
     }
 }

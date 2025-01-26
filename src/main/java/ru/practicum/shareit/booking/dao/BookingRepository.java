@@ -69,7 +69,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             WHERE i.owner = :owner
             AND b.status = :status
             ORDER BY start ASC""")
-    List<Booking> findAllByOwnerAndStatusOrderByStartAsc(@Param("owner") User owner, @Param("status") BookingStatus status);
+    List<Booking> findAllByOwnerAndStatusOrderByStartAsc(@Param("owner") User owner,
+                                                         @Param("status") BookingStatus status);
 
-    boolean existsByItemAndBookerAndStatus(Item item, User booker, BookingStatus status);
+    boolean existsByItemAndBookerAndStatusAndEndBefore(Item item, User booker, BookingStatus status, LocalDateTime now);
 }

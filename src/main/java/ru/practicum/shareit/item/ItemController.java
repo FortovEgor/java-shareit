@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dto.*;
@@ -60,7 +61,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<CommentDto> createComment(@RequestBody CreateCommentRequest request,
                                                     @PathVariable Long itemId,
-                                                    @RequestHeader("X-Sharer-User-Id") Long userId) throws ForbiddenException, NotFoundException {
+                                                    @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException, BadRequest {
 
         Comment comment = commentService.createComment(request, itemId, userId);
         return new ResponseEntity<>(itemMapper.toCommentDto(comment), HttpStatus.CREATED);
