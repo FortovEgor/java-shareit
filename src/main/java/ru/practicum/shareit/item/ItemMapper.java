@@ -25,4 +25,6 @@ public interface ItemMapper {
 
     @Mapping(target = "authorName", source = "comment.author.name")
     CommentDto toCommentDto(Comment comment);
+
+    List<CommentDto> toCommentDto(List<Comment> comments);
 }
