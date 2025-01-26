@@ -106,4 +106,26 @@ public class BookingService {
 
         return bookings;
     }
+
+    public List<Booking> getOwnerBookings(String stateValue, long userId) throws NotFoundException {
+        log.info("getting owner bookings...");
+
+        LocalDateTime now = LocalDateTime.now();
+
+        FilterBookingState state = FilterBookingState.valueOf(stateValue);
+        User owner = userService.getById(userId);
+
+        List<Booking> bookings = switch(state) {
+            case ALL -> repo.findAllByOwnerOrderByStartAsc(owner);
+            case CURRENT -> repo.findAllCurrentByOwnerOrderByStartAsc(owner, now);
+            case PAST -> repo.findAllPastByOwnerOrderByStartAsc(owner, now);
+            case FUTURE -> repo.findAllByOwnerOrderByStartAsc(owner, now);
+            case WAITING -> repo.findAllByOwnerAndStatusOrderByStartAsc(owner, BookingStatus.WAITING);
+            case REJECTED -> repo.findAllByOwnerAndStatusOrderByStartAsc(owner, BookingStatus.REJECTED);
+        };
+
+        log.info("found {} booking(s)", bookings.size());
+
+        return bookings;
+    }
 }

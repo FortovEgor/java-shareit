@@ -54,4 +54,11 @@ public class BookingController {
         List<Booking> bookings = bookingService.getUserBookings(stateValue, userId);
         return mapper.toDto(bookings);
     }
+
+    @GetMapping("/owner")
+    public List<BookingDto> getOwnerBookings(@RequestParam(required = false, defaultValue = "ALL") String stateValue,
+                                             @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
+        List<Booking> bookings = bookingService.getOwnerBookings(stateValue, userId);
+        return mapper.toDto(bookings);
+    }
 }
