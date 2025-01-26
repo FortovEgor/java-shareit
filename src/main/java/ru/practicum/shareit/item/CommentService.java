@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.exception.BadRequest;
-import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dto.CreateCommentRequest;
