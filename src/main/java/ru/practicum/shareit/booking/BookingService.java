@@ -31,6 +31,9 @@ public class BookingService {
     public Booking createBooking(@Valid CreateBookingRequest request, long userId) throws NotFoundException, BadRequest {
         log.info("creating booking = {}", request);
 
+        User booker = userService.getById(userId);
+        Item item = itemService.getById(request.getItemId());
+
         if (request.getStart().isAfter(request.getEnd())) {
             throw new BadRequest("Начало бронирования не должно быть после его окончания");
         }
@@ -39,13 +42,11 @@ public class BookingService {
             throw new BadRequest("Начало бронирования не должно совпадать с его окончанием");
         }
 
-        Item item = itemService.getById(request.getItemId());
-
         if (!item.isAvailable()) {
             throw new BadRequest("Вещь с id = %s недоступна для бронирования", item.getId());
         }
 
-        User booker = userService.getById(userId);
+
         Booking booking = mapper.toBooking(request);
         booking.setBooker(booker);
         booking.setItem(item);
