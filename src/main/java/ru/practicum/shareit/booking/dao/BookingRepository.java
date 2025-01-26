@@ -27,17 +27,17 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     @Query("""
             SELECT b
-            FROM Booking as b 
+            FROM Booking as b
             JOIN b.item as i
             WHERE i.owner = :owner
             ORDER BY start ASC""")
     List<Booking> findAllByOwnerOrderByStartAsc(@Param("owner") User owner);
 
     @Query("""
-            SELECT b 
+            SELECT b
             FROM Booking AS b
             JOIN b.item as i
-            WHERE i.owner = :owner 
+            WHERE i.owner = :owner
             AND b.start < :now AND b.end > :now
             ORDER BY start ASC
             """)

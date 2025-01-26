@@ -93,7 +93,7 @@ public class BookingService {
         FilterBookingState state = FilterBookingState.valueOf(stateValue);
         User user = userService.getById(userId);
 
-        List<Booking> bookings = switch(state) {
+        List<Booking> bookings = switch (state) {
             case ALL -> repo.findAllByBookerOrderByStartAsc(user);
             case CURRENT -> repo.findAllByBookerAndStartBeforeAndEndAfterOrderByStartAsc(user, now, now);
             case PAST -> repo.findAllByBookerAndEndBeforeOrderByStartAsc(user, now);
@@ -115,7 +115,7 @@ public class BookingService {
         FilterBookingState state = FilterBookingState.valueOf(stateValue);
         User owner = userService.getById(userId);
 
-        List<Booking> bookings = switch(state) {
+        List<Booking> bookings = switch (state) {
             case ALL -> repo.findAllByOwnerOrderByStartAsc(owner);
             case CURRENT -> repo.findAllCurrentByOwnerOrderByStartAsc(owner, now);
             case PAST -> repo.findAllPastByOwnerOrderByStartAsc(owner, now);

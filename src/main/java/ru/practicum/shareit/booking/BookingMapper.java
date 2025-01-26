@@ -14,6 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface BookingMapper {
     BookingDto toDto(Booking booking);
+
     List<BookingDto> toDto(List<Booking> bookings);
 
     Booking toBooking(CreateBookingRequest request);
