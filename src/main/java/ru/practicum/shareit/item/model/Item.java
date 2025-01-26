@@ -6,6 +6,8 @@ import lombok.*;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
+import java.time.LocalDateTime;
+
 /**
  * TODO Sprint add-controllers.
  */
@@ -23,14 +25,21 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  // для совместимости с большими значениями, генерируемыми SERIAL
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     private String name;
 
     private String description;
 
     private boolean available;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    @Transient
+    private LocalDateTime lastBooking;
+
+    @Transient
+    private LocalDateTime nextBooking;
+
 //    private ItemRequest request;
 }

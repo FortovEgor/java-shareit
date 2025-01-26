@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.ForbiddenException;
@@ -13,8 +14,10 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -64,8 +67,9 @@ public class ItemService {
                 .orElseThrow(() -> new NotFoundException("не найдена вещь с id = %s", itemId));
     }
 
-    public List<Item> getItemsByUserId(Long userId) {
-        return repo.findAllByOwnerId(userId);
+    public List<Item> getItemsByUserId(Long userId) throws NotFoundException {
+        User owner = userService.getById(userId);
+        return repo.findAllByOwnerWithPastNextBooking(owner, LocalDateTime.now());
     }
 
     public List<Item> search(String searchString) {

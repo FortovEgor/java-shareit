@@ -44,7 +44,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
         List<Item> items = itemService.getItemsByUserId(userId);
         return itemMapper.toDto(items);
     }
