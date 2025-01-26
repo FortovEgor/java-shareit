@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
 DROP TABLE IF EXISTS bookings CASCADE;
+DROP TABLE IF EXISTS comments CASCADE;
 DROP TYPE IF EXISTS BOOK_STATUSES CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
@@ -61,3 +62,27 @@ COMMENT ON COLUMN bookings.book_end IS 'Окончание бронирован�
 COMMENT ON COLUMN bookings.item_id IS 'Идентификатор вещи, которую бронируют';
 COMMENT ON COLUMN bookings.booker_id IS 'Идентификатор пользователя, который бронирует';
 COMMENT ON COLUMN bookings.book_status IS 'Статус бронирования';
+
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGSERIAL PRIMARY KEY,
+    comment_text TEXT NOT NULL,
+    author_id BIGINT NOT NULL,
+    item_id BIGINT NOT NULL,
+    created TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_comments_author_id
+        FOREIGN KEY(author_id)
+            REFERENCES users(id)
+                ON DELETE CASCADE,
+
+    CONSTRAINT fk_comments_item_id
+        FOREIGN KEY(item_id)
+            REFERENCES items(id)
+                ON DELETE CASCADE
+);
+COMMENT ON TABLE comments IS 'Таблица комментариев';
+COMMENT ON COLUMN comments.id IS 'Идентификатор комментария';
+COMMENT ON COLUMN comments.comment_text IS 'Текст комментария';
+COMMENT ON COLUMN comments.author_id IS 'Идентификатор автора комментария';
+COMMENT ON COLUMN comments.item_id IS 'Идентификатор комментируемой вещи';
+COMMENT ON COLUMN comments.created IS 'Время создания комментария';

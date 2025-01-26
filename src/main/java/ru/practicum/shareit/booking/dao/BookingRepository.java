@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingStatus;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -69,4 +70,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             AND b.status = :status
             ORDER BY start ASC""")
     List<Booking> findAllByOwnerAndStatusOrderByStartAsc(@Param("owner") User owner, @Param("status") BookingStatus status);
+
+    boolean existsByItemAndBookerAndStatus(Item item, User booker, BookingStatus status);
 }

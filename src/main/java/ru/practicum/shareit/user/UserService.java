@@ -26,8 +26,9 @@ public class UserService {
         log.info("Creating user {}", request);
         checkEmail(request.getEmail());
         User user = userMapper.toUser(request);
-        log.info("Saving user {}", user);
-        return repo.save(user);
+        User savedUser = repo.save(user);
+        log.info("Saved user {}", savedUser);
+        return savedUser;
     }
 
     private void checkEmail(String email) throws ConflictException {

@@ -128,4 +128,8 @@ public class BookingService {
 
         return bookings;
     }
+
+    public boolean existPastApprovedItemBookingByUser(Item item, User user) {
+        return repo.existsByItemAndBookerAndStatus(item, user, BookingStatus.APPROVED);
+    }
 }

@@ -24,7 +24,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             );
             """;
 
-    final String FIND_BY_OWNER_ID1 = """
+    final String FIND_BY_OWNER_ID = """
             SELECT new ru.practicum.shareit.item.model.Item(item.id,
                                                       item.owner,
                                                       item.name,
@@ -40,7 +40,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             GROUP BY item.id, item.owner, item.name, item.description, item.available
             """;
 
-    @Query(value = FIND_BY_OWNER_ID1)
+    @Query(value = FIND_BY_OWNER_ID)
     List<Item> findAllByOwnerWithPastNextBooking(@Param("owner") User owner, @Param("now") LocalDateTime now);
 
     @Query(value = SEARCH_QUERY, nativeQuery = true)
