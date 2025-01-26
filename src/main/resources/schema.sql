@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
 DROP TABLE IF EXISTS bookings CASCADE;
 DROP TABLE IF EXISTS comments CASCADE;
-DROP TYPE IF EXISTS BOOK_STATUSES CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
@@ -34,8 +33,6 @@ COMMENT ON COLUMN items.owner_id IS 'Идентификатор владельц
 COMMENT ON COLUMN items.name IS 'Название вещи';
 COMMENT ON COLUMN items.description IS 'Описание вещи';
 COMMENT ON COLUMN items.available IS 'Доступность вещи';
-
-CREATE TYPE BOOK_STATUSES AS ENUM ('WAITING', 'APPROVED', 'REJECTED', 'CANCELED');
 
 CREATE TABLE IF NOT EXISTS bookings (
     id BIGSERIAL PRIMARY KEY,
@@ -86,3 +83,4 @@ COMMENT ON COLUMN comments.comment_text IS 'Текст комментария';
 COMMENT ON COLUMN comments.author_id IS 'Идентификатор автора комментария';
 COMMENT ON COLUMN comments.item_id IS 'Идентификатор комментируемой вещи';
 COMMENT ON COLUMN comments.created IS 'Время создания комментария';
+
