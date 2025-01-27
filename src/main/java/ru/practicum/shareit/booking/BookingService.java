@@ -16,7 +16,6 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.User;
 
-import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 
