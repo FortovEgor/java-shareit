@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 
-// NOT USED ANYMORE (UserRepository is used instead)
+@Deprecated
 @Repository
 public class UserRepoImpl implements UserRepo {
     private final Map<Long, User> users = new HashMap<>();

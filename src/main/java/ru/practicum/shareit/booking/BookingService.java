@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.dto.CreateBookingRequest;
@@ -15,6 +16,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.User;
 
+import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public class BookingService {
     private final BookingRepository repo;
     private final BookingMapper mapper;
 
+    @Transactional
     public Booking createBooking(@Valid CreateBookingRequest request, long userId) throws NotFoundException, BadRequest {
         log.info("creating booking = {}", request);
 
@@ -57,6 +60,7 @@ public class BookingService {
         return createdBooking;
     }
 
+    @Transactional
     public Booking approveBooking(Long bookingId, boolean approved, long userId) throws NotFoundException, ForbiddenException {
         log.info("approving booking = {}", bookingId);
 

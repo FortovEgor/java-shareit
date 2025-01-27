@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -24,6 +25,7 @@ public class CommentService {
     private final ItemMapper itemMapper;
     private final CommentRepository commentRepository;
 
+    @Transactional
     public Comment createComment(@Valid CreateCommentRequest request, Long itemId, Long userId) throws NotFoundException, BadRequest {
 
         Item item = itemService.getById(itemId);

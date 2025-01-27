@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository repo;
     private final UserMapper userMapper;
 
+    @Transactional
     public User createUser(@Valid CreateUserRequest request) throws ConflictException {
         log.info("Creating user {}", request);
         checkEmail(request.getEmail());
@@ -43,6 +45,7 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Не найден пользователь с userId = %d", userId));
     }
 
+    @Transactional
     public User updateUser(Long userId, UpdateUserRequest request) throws ConflictException, NotFoundException {
         log.info("Updating user with id = {} with {}", userId, request);
         User user = getById(userId);
@@ -64,6 +67,7 @@ public class UserService {
         return repo.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long userId) {
         repo.deleteById(userId);
     }
