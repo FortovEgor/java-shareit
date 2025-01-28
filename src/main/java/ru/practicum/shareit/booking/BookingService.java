@@ -119,10 +119,10 @@ public class BookingService {
         User owner = userService.getById(userId);
 
         List<Booking> bookings = switch (state) {
-            case ALL -> repo.findAllByOwnerOrderByStartAsc(owner);
+            case ALL -> repo.findAllSortedOwnerBookings(owner);
             case CURRENT -> repo.findAllCurrentByOwnerOrderByStartAsc(owner, now);
             case PAST -> repo.findAllPastByOwnerOrderByStartAsc(owner, now);
-            case FUTURE -> repo.findAllByOwnerOrderByStartAsc(owner, now);
+            case FUTURE -> repo.findAllSortedOwnerBookings(owner, now);
             case WAITING -> repo.findAllByOwnerAndStatusOrderByStartAsc(owner, BookingStatus.WAITING);
             case REJECTED -> repo.findAllByOwnerAndStatusOrderByStartAsc(owner, BookingStatus.REJECTED);
         };

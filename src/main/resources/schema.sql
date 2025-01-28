@@ -83,4 +83,3 @@ COMMENT ON COLUMN comments.comment_text IS 'Текст комментария';
 COMMENT ON COLUMN comments.author_id IS 'Идентификатор автора комментария';
 COMMENT ON COLUMN comments.item_id IS 'Идентификатор комментируемой вещи';
 COMMENT ON COLUMN comments.created IS 'Время создания комментария';
-

@@ -31,7 +31,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             JOIN b.item as i
             WHERE i.owner = :owner
             ORDER BY start ASC""")
-    List<Booking> findAllByOwnerOrderByStartAsc(@Param("owner") User owner);
+    List<Booking> findAllSortedOwnerBookings(@Param("owner") User owner);
 
     @Query("""
             SELECT b
@@ -60,7 +60,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             WHERE i.owner = :owner
             AND b.start > :now
             ORDER BY start ASC""")
-    List<Booking> findAllByOwnerOrderByStartAsc(@Param("owner") User owner, @Param("now") LocalDateTime now);
+    List<Booking> findAllSortedOwnerBookings(@Param("owner") User owner, @Param("now") LocalDateTime now);
 
     @Query("""
             SELECT b

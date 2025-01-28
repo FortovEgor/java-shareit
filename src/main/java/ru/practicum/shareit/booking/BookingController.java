@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.CreateBookingRequest;
@@ -26,11 +25,11 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<BookingDto> createBooking(@RequestBody CreateBookingRequest request,
+    @ResponseStatus(HttpStatus.CREATED)
+    public BookingDto createBooking(@RequestBody CreateBookingRequest request,
                                                     @RequestHeader("X-Sharer-User-Id") Long userid) throws NotFoundException, BadRequest {
         Booking booking = bookingService.createBooking(request, userid);
-        BookingDto dto = mapper.toDto(booking);
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+        return mapper.toDto(booking);
     }
 
     @PatchMapping("/{bookingId}")
