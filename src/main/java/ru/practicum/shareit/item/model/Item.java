@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
@@ -44,7 +45,13 @@ public class Item {
     @Transient
     private LocalDateTime nextBooking;
 
-    public Item(Long id, User owner, String name, String description, boolean available, List<Comment> comments) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private ItemRequest request;
+    // если вещь была создана по запросу другого пользователя,
+    // то в этом поле будет храниться ссылка на соответствующий запрос
+
+    public Item(Long id, User owner, String name, String description, boolean available, List<Comment> comments, ItemRequest itemRequest) {
         this.id = id;
         this.owner = owner;
         this.name = name;
@@ -53,5 +60,6 @@ public class Item {
         if (comments != null) {
             this.comments = comments;
         }
+        this.request = itemRequest;
     }
 }

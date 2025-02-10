@@ -15,4 +15,6 @@ public class CreateItemRequest {
 
     @NotNull(message = "Должно быть указано, дсотупна ли вещь для аренды")
     private Boolean available;
+
+    private Long requestId;
 }
