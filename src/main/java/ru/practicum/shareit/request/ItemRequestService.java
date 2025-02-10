@@ -18,12 +18,12 @@ import java.util.List;
 public class ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserService userService;
-    private final ItemRequestMapper itemRequestMapper;
 
     public ItemRequest createItemRequest(ItemRequestDto request, Long userId) throws NotFoundException {
         User user = userService.getById(userId);
         log.info("User " + user + " is creating a new item request");
-        ItemRequest itemRequest = itemRequestMapper.toItemRequest(request);
+        ItemRequest itemRequest = ItemRequestMapper.INSTANCE.toItemRequest(request, user);
+        itemRequest.setRequestor(user);
         return itemRequestRepository.save(itemRequest);
     }
 

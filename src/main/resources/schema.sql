@@ -19,7 +19,7 @@ COMMENT ON COLUMN users.email IS 'Адрес почты пользователя
 CREATE TABLE IF NOT EXISTS requests (
   id BIGSERIAL PRIMARY KEY,
   description VARCHAR(512) NOT NULL,
-  requestor_id BIGINT NOT NULL,
+  requestor_id BIGINT,
   created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   CONSTRAINT fk_request_to_users
     FOREIGN KEY(requestor_id)

@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ import java.util.List;
 /**
  * TODO Sprint add-controllers.
  */
+
+@Slf4j
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class ItemController {
     public ItemDto createItem(@RequestBody CreateItemRequest request,
                                               @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
         Item item = itemService.createItem(request, userId);
+        log.info("BEBEBE: " + request.toString());
         return itemMapper.toDto(item);
     }
 

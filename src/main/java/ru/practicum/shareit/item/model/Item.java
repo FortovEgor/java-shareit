@@ -45,7 +45,7 @@ public class Item {
     @Transient
     private LocalDateTime nextBooking;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "request_id")
     private ItemRequest request;
     // если вещь была создана по запросу другого пользователя,

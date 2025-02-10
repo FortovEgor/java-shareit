@@ -13,6 +13,10 @@ import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.ItemLastNextBookDate;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequestMapper;
+import ru.practicum.shareit.request.ItemRequestService;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
@@ -29,6 +33,7 @@ import java.util.Map;
 public class ItemService {
 
     private final UserService userService;
+    private final ItemRequestRepository itemRequestRepository;
     private final ItemRepository repo;
     private final ItemMapper itemMapper;
 
@@ -37,6 +42,12 @@ public class ItemService {
         User owner = userService.getById(userId);
         Item item = itemMapper.toItem(request);
         item.setOwner(owner);
+        Long requestId = request.getRequestId();
+        if (requestId != null) {
+            ItemRequest itemRequest = itemRequestRepository.findById(requestId)
+                    .orElseThrow(() -> new NotFoundException("Could not find item request with id = " + requestId));
+            item.setRequest(itemRequest);
+        }
         return repo.save(item);
     }
 

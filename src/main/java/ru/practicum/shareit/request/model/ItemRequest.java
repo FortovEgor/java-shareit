@@ -31,7 +31,7 @@ public class ItemRequest {
     private String description; // текст запроса, содержащий описание требуемой вещи
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "requestor_id", nullable = false)
+    @JoinColumn(name = "requestor_id")
     private User requestor; // пользователь, создавший запрос
 
     @Column
