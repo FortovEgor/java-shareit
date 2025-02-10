@@ -1,6 +1,5 @@
 package ru.practicum.shareit.request;
 
-import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -23,11 +22,4 @@ public interface ItemRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "requestor", source = "requestor")
     ItemRequest toItemRequest(ItemRequestDto request, User requestor);
-//
-//    Comment toComment(CreateCommentRequest request);
-//
-//    @Mapping(target = "authorName", source = "comment.author.name")
-//    CommentDto toCommentDto(Comment comment);
-//
-//    List<CommentDto> toCommentDto(List<Comment> comments);
 }
