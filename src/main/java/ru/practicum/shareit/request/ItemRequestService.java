@@ -3,6 +3,7 @@ package ru.practicum.shareit.request;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
@@ -14,11 +15,13 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserService userService;
 
+    @Transactional
     public ItemRequest createItemRequest(ItemRequestDto request, Long userId) throws NotFoundException {
         User user = userService.getById(userId);
         log.info("User " + user + " is creating a new item request");
