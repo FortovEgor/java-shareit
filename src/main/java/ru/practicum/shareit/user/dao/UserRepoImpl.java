@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+
+@Deprecated
 @Repository
 public class UserRepoImpl implements UserRepo {
     private final Map<Long, User> users = new HashMap<>();

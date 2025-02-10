@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Deprecated
 @Repository
 public class ItemRepoImpl implements ItemRepo {
     private Map<Long, Item> items = new HashMap<>();

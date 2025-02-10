@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.item.dto.CreateItemRequest;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class ItemController {
 
     private final ItemMapper itemMapper;
     private final ItemService itemService;
+    private final CommentService commentService;
 
     @PostMapping
     public ItemDto createItem(@RequestBody CreateItemRequest request,
@@ -39,12 +42,12 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@PathVariable Long itemId) throws NotFoundException {
-        Item item = itemService.getItemById(itemId);
+        Item item = itemService.getById(itemId);
         return itemMapper.toDto(item);
     }
 
     @GetMapping
-    public List<ItemDto> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemDto> getItemsByUserId(@RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException {
         List<Item> items = itemService.getItemsByUserId(userId);
         return itemMapper.toDto(items);
     }
@@ -53,5 +56,14 @@ public class ItemController {
     public List<ItemDto> search(@RequestParam("text") String searchString) {
         List<Item> items = itemService.search(searchString);
         return itemMapper.toDto(items);
+    }
+
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<CommentDto> createComment(@RequestBody CreateCommentRequest request,
+                                                    @PathVariable Long itemId,
+                                                    @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException, BadRequest {
+
+        Comment comment = commentService.createComment(request, itemId, userId);
+        return new ResponseEntity<>(itemMapper.toCommentDto(comment), HttpStatus.CREATED);
     }
 }
