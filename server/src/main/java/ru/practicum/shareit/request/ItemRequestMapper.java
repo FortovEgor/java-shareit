@@ -15,6 +15,7 @@ import java.util.List;
 public interface ItemRequestMapper {
 
     ItemRequestMapper INSTANCE = Mappers.getMapper(ItemRequestMapper.class);
+
     ItemRequestDto toDto(ItemRequest itemRequest);
 
     List<ItemRequestDto> toDto(List<ItemRequest> itemRequest);
