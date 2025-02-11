@@ -2,6 +2,7 @@ package ru.practicum.shareit.util;
 
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
+
 import java.util.Random;
 
 public class TestUtil {
