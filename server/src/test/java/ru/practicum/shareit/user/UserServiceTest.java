@@ -96,17 +96,17 @@ public class UserServiceTest {
     }
 
     @Test
-    void getUserByIdNullTest() throws NotFoundException {
+    void getUserByIdNullTest() {
         assertEquals(userMapper.toDto(null), null); // .getId(), userService.getById(1L).getId());
     }
 
     @Test
-    void getUserById33NullTest() throws NotFoundException {
+    void getUserById33NullTest() {
         assertEquals(userMapper.toRequest(null), null); // .getId(), userService.getById(1L).getId());
     }
 
     @Test
-    void getUserToIdNullTest() throws NotFoundException {
+    void getUserToIdNullTest() {
         assertEquals(userMapper.toUser(null), null); // .getId(), userService.getById(1L).getId());
     }
 }
