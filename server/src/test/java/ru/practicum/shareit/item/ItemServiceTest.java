@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item;
 
 import org.mapstruct.factory.Mappers;
-import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
-import ru.practicum.shareit.item.dto.CreateCommentRequest;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Comment;
