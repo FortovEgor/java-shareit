@@ -39,7 +39,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ContextConfiguration(classes= ShareItServer.class)
+@ContextConfiguration(classes=ShareItServer.class)
 @Transactional
 class BookingServiceTest {
     private final BookingRepository bookingRepository;
