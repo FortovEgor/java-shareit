@@ -24,7 +24,6 @@ import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
-import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -171,8 +170,9 @@ class BookingServiceTest {
 //                        LocalDateTime.now().plusDays(2)), 1));
 //    }
 //
+
     @Test
-    void updateBookingTest() throws ForbiddenException, NotFoundException {
+    void updateBookingTest() {
         when(bookingRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(booking));
         assertDoesNotThrow(() -> bookingService.approveBooking(booking.getId(), true, user.getId()));
@@ -201,6 +201,7 @@ class BookingServiceTest {
 //                .approveBooking(bookingReject.getId(), true, user.getId()));
 //    }
 //
+
     @Test
     void updateBookingApprovedByNotOwnerTest() {
         when(bookingRepository.findById(anyLong()))
