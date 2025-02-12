@@ -25,6 +25,7 @@ import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -210,11 +211,15 @@ class BookingServiceTest {
                 .approveBooking(booking.getId(), true, user2.getId()));
     }
 
-//    @Test
-//    void getAllBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(3,
-//                bookingService.getUserBookings("ALL", user2.getId()).size());
-//    }
+    @Test
+    void getAllBookingByUserIdTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerOrderByStartAsc(any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("ALL", user2.getId()).size());
+    }
 //
 //    @Test
 //    void getPastBookingByUserIdTest() throws NotFoundException {
@@ -258,11 +263,15 @@ class BookingServiceTest {
 //                .getOwnerBookings("BAD_STATE", user2.getId()).get(0).getId());
 //    }
 //
-//    @Test
-//    void getAllBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(3,
-//                bookingService.getOwnerBookings("ALL", user.getId()).size());
-//    }
+    @Test
+    void getAllBookingByOwnerIdTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllSortedOwnerBookings(any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("ALL", user.getId()).size());
+    }
 //
 //    @Test
 //    void getPastBookingByOwnerIdTest() throws NotFoundException {
@@ -310,5 +319,14 @@ class BookingServiceTest {
 //    void getAllBookingByOwnerIdNullStateTest() throws NotFoundException {
 //        assertThrows(NullPointerException.class,
 //                () -> bookingService.getOwnerBookings(null, user.getId()).size());
+//    }
+    @Test
+    void getUserBookingsTest() {
+
+    }
+
+//    @Test
+//    void mapperTest() {
+//        bookingMapper.commentToCommentDto()
 //    }
 }

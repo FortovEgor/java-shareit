@@ -9,8 +9,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.user.dto.UpdateUserRequest;
 
 
 import java.util.Optional;
@@ -42,6 +44,17 @@ public class UserServiceTest {
                 .thenReturn(newUser);
         assertEquals(userService.createUser(userMapper.toRequest(newUser)), newUser);
 //                userService.getById(newUser.getId()).getId(), user1.getId());
+    }
+
+    @Test
+    void updateUserTest() throws ConflictException, NotFoundException {
+        User user = new User(1L, "name", "email");
+        User newUser = new User(1L, "newName", "newEmail");
+        when(userRepository.findById(anyLong()))
+                .thenReturn(Optional.of(user));
+        when(userRepository.save(any()))
+                .thenReturn(newUser);
+        assertDoesNotThrow(() -> userService.updateUser(user.getId(), new UpdateUserRequest("name", "email"))); // getuserMapper.toRequest(newUser)), newUser);
     }
 
 //    @Test

@@ -1,14 +1,25 @@
 package ru.practicum.shareit.request;
 
 import org.hamcrest.Matchers;
+import org.mapstruct.factory.Mappers;
+import org.mockito.Spy;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.dto.CreateItemRequest;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dao.UserRepository;
 
+import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +38,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ItemRequestServiceTest {
 
+    @Spy
+    private ItemRequestMapper itemRequestMapper = Mappers.getMapper(ItemRequestMapper.class);
     @Mock
     private ItemRequestRepository itemRequestRepository;
     @Mock
@@ -216,6 +229,36 @@ class ItemRequestServiceTest {
 //        inOrder.verify(userRepository, times(1)).findById(anyLong());
 //        inOrder.verify(itemRequestRepository, never()).save(any(ItemRequest.class));
 //    }
+
+    @Test
+    void createItemRequestTest() throws NotFoundException {
+        Long userId = 0L;
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(itemRequestRepository.save(any()))
+                .thenReturn(new ItemRequest());
+
+        ItemRequest actualItemRequest = itemRequestService
+                .createItemRequest(new ItemRequestDto(1L, "description", Instant.now(),  null), userId);
+
+        assertNotNull(actualItemRequest);
+//        assertDoesNotThrow();
+//        assertThat(String.valueOf(actualItemRequest), equals(new ItemRequest()));
+    }
+
+    @Test
+    void getRequestByIdTest() throws NotFoundException {
+        Long userId = 0L;
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(itemRequestRepository.findById(any()))
+                .thenReturn(Optional.of(new ItemRequest()));
+
+        ItemRequest actualItemRequest = itemRequestService
+                .getRequestById(1L, userId);
+
+        assertNotNull(actualItemRequest);
+    }
 //
 //    @Test
 //    @DisplayName("сохранен запрос, когда запрос не валиден, тогда выбрасывается исключение")
@@ -235,4 +278,10 @@ class ItemRequestServiceTest {
 //        inOrder.verify(itemRequestRepository, times(1)).save(any(ItemRequest.class));
 //    }
 
+    @Test
+    void mapper2Test() {
+        Set<ItemDto> items = new HashSet<>();
+        items.add(new ItemDto());
+        assertDoesNotThrow(() -> itemRequestMapper.toItemRequest(new ItemRequestDto(1L, "descr", Instant.now(), items), new User()));
+    }
 }

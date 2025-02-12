@@ -1,9 +1,13 @@
 package ru.practicum.shareit.item;
 
+import org.hamcrest.MatcherAssert;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.shareit.booking.dao.BookingRepository;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
@@ -13,6 +17,7 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dao.UserRepository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +30,7 @@ import org.mockito.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -54,12 +59,17 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("получены все вещи, когда вызваны по умолчанию, то получен пустой список")
-    void getAllItemsByUser_whenInvoked_thenReturnedEmptyList() throws NotFoundException {
+    void getAllItemsByUser_whenInvoked_thenReturnedNotEmptyList() throws NotFoundException {
         Long userId = 0L;
+        when(userService.getById(anyLong()))
+                .thenReturn(new User(userId, "name", "email"));
+        when(itemRepository.findAllByOwnerWithComments(any()))
+                .thenReturn(List.of(new Item(), new Item()));
 
         List<Item> actualItems = itemService.getItemsByUserId(userId);
 
-        assertThat(actualItems, empty());
+
+        assertThat(actualItems.size(), equalTo(2));
         verify(itemRepository, never()).findById(anyLong());
         verify(commentRepository, never()).findById(anyLong());
         verify(itemRepository, times(1))
@@ -338,7 +348,7 @@ class ItemServiceTest {
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         final NotFoundException exception = assertThrows(NotFoundException.class,
-                () -> itemService.updateItem(new UpdateItemRequest(), 100L, 200L));
+                () -> itemService.updateItem(new UpdateItemRequest("name", "desc", true), 100L, 200L));
 
         assertThat("не найдена вещь с id = 100", equalTo(exception.getMessage()));
         verify(itemRepository, times(1)).findById(anyLong());
@@ -439,6 +449,40 @@ class ItemServiceTest {
 //        verify(itemRepository, times(1))
 //                .search("1");
     }
+
+    @Test
+    void deleteTest() throws NotFoundException, ForbiddenException {
+        User user = new User(1L, "name", "email");
+        Item item = new Item(1L, user, "a", "b", true, null, null);
+        when(userService.getById(anyLong()))
+                .thenReturn(user);
+        when(itemRepository.findById(any()))
+                .thenReturn(Optional.of(item));
+        assertDoesNotThrow(() -> itemService.deleteById(1L, 2L));
+    }
+
+    @Test
+    void updateItemTest() throws NotFoundException {
+        User user = new User(1L, "name", "email");
+        Item item = new Item(1L, user, "a", "b", true, null, null);
+        when(itemRepository.findById(any()))
+                .thenReturn(Optional.of(item));
+        when(userService.getById(anyLong()))
+                .thenReturn(user);
+        assertDoesNotThrow(() -> itemService.updateItem(new UpdateItemRequest("name", "description", true), item.getId(), user.getId()));
+    }
+
+    @Test
+    void deleteByIdTest() throws NotFoundException {
+        User user = new User(1L, "name", "email");
+        Item item = new Item(1L, user, "a", "b", true, null, null);
+        when(itemRepository.findById(any()))
+                .thenReturn(Optional.of(item));
+        when(userService.getById(anyLong()))
+                .thenReturn(user);
+        assertDoesNotThrow(() -> itemService.deleteById(item.getId(), user.getId()));
+    }
+
 
 //    @Test
 //    @DisplayName("получены все вещи по тексту, когда вызваны, то получен непустой список")
@@ -573,4 +617,23 @@ class ItemServiceTest {
 //        inOrder.verify(commentRepository, never()).save(any(Comment.class));
 //    }
 
+    @Test
+    void mapperTest() {
+        assertDoesNotThrow(() -> itemMapper.toCommentDto(new Comment(1L, "", new User(), new Item(), Instant.now())));
+    }
+
+    @Test
+    void mapperListTest() {
+        assertDoesNotThrow(() -> itemMapper.toCommentDto(List.of(new Comment(1L, "", new User(), new Item(), Instant.now()))));
+    }
+
+    @Test
+    void mapperItemDtoTest() {
+        assertDoesNotThrow(() -> itemMapper.toDto(new Item()));
+    }
+
+    @Test
+    void mapperItemDtoListTest() {
+        assertDoesNotThrow(() -> itemMapper.toDto(List.of(new Item())));
+    }
 }
