@@ -67,6 +67,7 @@ class ItemControllerTest {
                 .build();
 //        bookingDto = new BookingDto(1L, LocalDateTime.now(), LocalDateTime.now(), itemMapper.toDto(item), new UserDto(), BookingStatus.WAITING);
     }
+
     @Test
     void createItemTest() throws Exception {
         Item item = new Item(itemDto1.getId(), new User(), itemDto1.getName(), itemDto1.getDescription(), itemDto1.isAvailable(), null, new ItemRequest());

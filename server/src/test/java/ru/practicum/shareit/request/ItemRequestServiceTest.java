@@ -72,6 +72,7 @@ class ItemRequestServiceTest {
 //        inOrder.verify(itemRequestRepository, times(1)).findAllByRequestorId(anyLong());
     }
 //
+
     @Test
     @DisplayName("получены все свои запросы вместе с данными об ответах на них, " +
             "когда пользователь не найден, тогда выбрасывается исключение")
@@ -88,6 +89,7 @@ class ItemRequestServiceTest {
 //        inOrder.verify(itemRequestRepository, never()).findAllByRequestorId(anyLong());
     }
 //
+    
     @Test
     @DisplayName("получены все запросы, созданные другими пользователями, " +
             "когда вызваны по умолчанию, то получен пустой список")

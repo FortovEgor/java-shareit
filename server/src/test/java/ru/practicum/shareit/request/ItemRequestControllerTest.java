@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ItemRequestController.class)
-@ContextConfiguration(classes= ShareItServer.class)
+@ContextConfiguration(classes = ShareItServer.class)
 @AutoConfigureMockMvc
 class ItemRequestControllerTest {
     @Autowired

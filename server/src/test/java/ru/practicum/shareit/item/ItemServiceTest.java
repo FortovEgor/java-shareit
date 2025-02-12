@@ -98,6 +98,7 @@ class ItemServiceTest {
     }
 //
 //
+
     @Test
     @DisplayName("получена вещь по ид, когда вещь найдена, тогда она возвращается")
     void getItemById_whenItemFound_thenReturnedItem() throws NotFoundException {
@@ -328,6 +329,7 @@ class ItemServiceTest {
 //        inOrder.verify(itemRepository, times(1)).saveAndFlush(any(Item.class));
 //    }
 //
+
     @Test
     @DisplayName("обновлена вещь, когда вещь не найдена, тогда выбрасывается исключение")
     void updateItem_whenItemNotFound_thenExceptionThrown() {
@@ -414,6 +416,7 @@ class ItemServiceTest {
 //        inOrder.verify(itemRepository, times(1)).saveAndFlush(any(Item.class));
 //    }
 //
+
     @Test
     @DisplayName("получены все вещи по тексту, когда вызваны по умолчанию, то получен пустой список")
     void findItems_whenInvokedWithEmptyText_thenReturnedEmptyList() throws NotFoundException {
