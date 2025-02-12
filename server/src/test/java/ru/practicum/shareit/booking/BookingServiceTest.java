@@ -430,7 +430,8 @@ class BookingServiceTest {
         Comment comment = new Comment(1L, "", new User(), new Item(), Instant.now());
         List<Comment> comments = new ArrayList<>();
         comments.add(comment);
-        Item item = new Item(1L, user, "Дрель", "Простая дрель", true, comments , new ItemRequest(1));
+        Item item = new Item(1L, user, "Дрель", "Простая дрель", true, comments,
+                new ItemRequest(1));
         assertDoesNotThrow(() -> bookingMapper.toItemDto(item));
     }
 
