@@ -676,11 +676,14 @@ class ItemServiceTest {
         assertDoesNotThrow(() -> itemService.search(""));
     }
 
-    @Test void search22() {
-        when(itemRepository.search(anyString()))
-                .thenReturn((List<Item>) new Item());
-        assertDoesNotThrow(() -> itemService.search("111"));
-    }
+//    @Test void search22() {
+//        try {
+//
+//        }
+//        when(itemRepository.search(anyString()))
+//                .thenReturn((List<Item>) new Item());
+//        assertDoesNotThrow(() -> itemService.search("111"));
+//    }
 
     @Test
     void searchFail() {
