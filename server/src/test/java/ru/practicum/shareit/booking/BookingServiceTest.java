@@ -113,7 +113,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void createBookingAvailableTest() throws NotFoundException {
+    void createBookingNotAvailableTest() throws NotFoundException {
         when(itemService.getById(any(Long.class)))
                 .thenReturn(itemNotAvailable);
         assertThrows(BadRequest.class, () -> bookingService.createBooking(
@@ -267,7 +267,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void justTest() {
+    void existPastApprovedItemBookingByUserTest() {
         assertDoesNotThrow(() -> bookingService.existPastApprovedItemBookingByUser(new Item(), new User()));
     }
 

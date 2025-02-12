@@ -53,12 +53,8 @@ class ItemServiceTest {
     @InjectMocks
     private ItemService itemService;
 
-    @Captor
-    private ArgumentCaptor<Item> itemArgumentCaptor;
-
     @Test
-    @DisplayName("получены все вещи, когда вызваны по умолчанию, то получен пустой список")
-    void getAllItemsByUser_whenInvoked_thenReturnedNotEmptyList() throws NotFoundException {
+    void getAllItemsByUserWhenInvokedThenReturnedNotEmptyList() throws NotFoundException {
         Long userId = 0L;
         Item item = new Item(1L, new User(), "f", "d",
                 true, null, new ItemRequest());
@@ -77,8 +73,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("получены все вещи, когда вызваны, то получен непустой список")
-    void getAllItemsByUser_whenInvoked_thenReturnedItemsCollectionInList() throws NotFoundException {
+    void getAllItemsByUserWhenInvokedThenReturnedItemsCollectionInList() throws NotFoundException {
         long userId = 0L;
         User user = new User();
         user.setId(1L);
@@ -105,8 +100,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("получена вещь по ид, когда вещь найдена, тогда она возвращается")
-    void getItemById_whenItemFound_thenReturnedItem() throws NotFoundException {
+    void getItemByIdWhenItemFoundThenReturnedItem() throws NotFoundException {
         long itemId = 0L;
         long userId = 0L;
         Item expectedItem = new Item();
@@ -121,8 +115,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("получена вещь по ид, когда вещь не найдена, тогда выбрасывается исключение")
-    void getItemById_whenItemNotFound_thenExceptionThrown() {
+    void getItemByIdWhenItemNotFoundThenExceptionThrown() {
         long itemId = 0L;
         when(itemRepository.findById(itemId)).thenReturn(Optional.empty());
 
@@ -134,11 +127,9 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("сохранена вещь, когда вещь валидна, тогда она сохраняется")
-    void saveItem_whenItemValid_thenSavedItem() throws NotFoundException {
+    void saveItemWhenItemValidThenSavedItem() throws NotFoundException {
         Item itemToSave = new Item();
         itemToSave.setAvailable(true);
-        Long userId = 0L;
         User user = new User();
         when(itemRepository.save(any(Item.class)))
                 .thenReturn(itemToSave);
@@ -152,8 +143,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("обновлена вещь, когда вещь не найдена, тогда выбрасывается исключение")
-    void updateItemTestd() {
+    void updateItemExceptionTest() {
         Long userId = 0L;
         Long itemId = 0L;
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -168,8 +158,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("получены все вещи по тексту, когда вызваны по умолчанию, то получен пустой список")
-    void findItems_whenInvokedWithEmptyText_thenReturnedList() throws NotFoundException {
+    void findItemsWhenInvokedWithEmptyTextThenReturnedList() throws NotFoundException {
         Long userId = 0L;
         when(itemRepository.findAllByOwnerWithComments(any()))
                 .thenReturn(List.of(new Item()));
@@ -179,8 +168,7 @@ class ItemServiceTest {
     }
 
     @Test
-    @DisplayName("получены все вещи по тексту, когда вызваны по умолчанию, то получен пустой список")
-    void findItems_whenInvoked_thenReturnedEmptyList() throws NotFoundException {
+    void findItemsWhenInvokedThenReturnedEmptyList() throws NotFoundException {
         Long userId = 0L;
 
         List<Item> actualItems = itemService.getItemsByUserId(userId);
@@ -189,7 +177,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void deleteTest() throws NotFoundException, ForbiddenException {
+    void deleteTest() throws NotFoundException {
         User user = new User(1L, "name", "email");
         Item item = new Item(1L, user, "a", "b", true, null, null);
         when(userService.getById(anyLong()))

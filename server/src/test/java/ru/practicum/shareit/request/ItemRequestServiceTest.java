@@ -51,9 +51,9 @@ class ItemRequestServiceTest {
     private ItemRequestService itemRequestService;
 
     @Test
-    @DisplayName("получены все свои запросы вместе с данными об ответах на них, " +
+    @DisplayName("Получены все свои запросы вместе с данными об ответах на них, " +
             "когда вызваны по умолчанию, то получен пустой список")
-    void getAllItemRequestsByUser_whenInvoked_thenReturnedEmptyList() throws NotFoundException {
+    void getAllItemRequestsByUserWhenInvokedThenReturnedEmptyList() throws NotFoundException {
         Long userId = 0L;
         when(userService.getById(anyLong())).thenReturn(new User());
 
@@ -63,9 +63,9 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    @DisplayName("получены все свои запросы вместе с данными об ответах на них, " +
+    @DisplayName("Получены все свои запросы вместе с данными об ответах на них, " +
             "когда вызваны, то получен непустой список")
-    void getAllItemRequestsByUser_whenInvoked_thenReturneItemRequestsCollectionInList() throws NotFoundException {
+    void getAllItemRequestsByUserWhenInvokedThenReturnedItemRequestsCollectionInList() throws NotFoundException {
         Long userId = 0L;
         List<ItemRequest> expectedItemRequests = List.of(new ItemRequest(), new ItemRequest());
         when(userService.getById(anyLong())).thenReturn(new User());
@@ -77,9 +77,9 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    @DisplayName("получены все свои запросы вместе с данными об ответах на них, " +
+    @DisplayName("Получены все свои запросы вместе с данными об ответах на них, " +
             "когда пользователь не найден, тогда выбрасывается исключение")
-    void getAllItemRequestsByUser_whenUserNotFound_thenExceptionThrown() throws NotFoundException {
+    void getAllItemRequestsByUserWhenUserNotFoundThenExceptionThrown() throws NotFoundException {
         Long userId = 0L;
         when(userService.getById(anyLong())).thenThrow(new NotFoundException("Не найден пользователь с userId = 100"));
 
@@ -90,9 +90,9 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    @DisplayName("получены все запросы, созданные другими пользователями, " +
+    @DisplayName("Получены все запросы, созданные другими пользователями, " +
             "когда вызваны по умолчанию, то получен пустой список")
-    void getAllItemRequestsByOtherUsers_whenInvoked_thenReturnedEmptyList() throws NotFoundException {
+    void getAllItemRequestsByOtherUsersWhenInvokedThenReturnedEmptyList() throws NotFoundException {
         Long userId = 0L;
         when(userService.getById(anyLong()))
                 .thenReturn(new User());
@@ -107,9 +107,9 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    @DisplayName("получены все запросы, созданные другими пользователями, " +
+    @DisplayName("Получены все запросы, созданные другими пользователями, " +
             "когда вызваны, то получен непустой список")
-    void getAllItemRequestsByOtherUsers_whenInvoked_thenReturneItemRequestsCollectionInList() throws NotFoundException {
+    void getAllItemRequestsByOtherUsersWhenInvokedThenReturnItemRequestsCollectionInList() throws NotFoundException {
         Long userId = 0L;
         List<ItemRequest> expectedItemRequests = List.of(new ItemRequest(), new ItemRequest());
         when(itemRequestRepository.findAllByRequestorIdNotOrderByCreatedDesc(anyLong()))
@@ -122,9 +122,9 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    @DisplayName("получены все свои запросы вместе с данными об ответах на них, " +
+    @DisplayName("Получены все свои запросы вместе с данными об ответах на них, " +
             "когда пользователь не найден, тогда выбрасывается исключение")
-    void getAllItemRequestsByOtherUsers_whenUserNotFound_thenExceptionThrown() throws NotFoundException {
+    void getAllItemRequestsByOtherUsersWhenUserNotFoundThenExceptionThrown() throws NotFoundException {
         Long userId = 0L;
         when(userService.getById(anyLong())).thenThrow(new NotFoundException("Пользователь с id = 0 не найден."));
 

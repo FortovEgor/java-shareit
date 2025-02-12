@@ -26,8 +26,6 @@ public class CommentServiceTest {
     @Spy
     private ItemMapper itemMapper = Mappers.getMapper(ItemMapper.class);
 
-
-
     @Mock
     private ItemService itemService;
 
