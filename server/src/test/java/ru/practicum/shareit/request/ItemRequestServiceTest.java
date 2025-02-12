@@ -88,8 +88,7 @@ class ItemRequestServiceTest {
 //        inOrder.verify(userRepository, times(1)).findById(anyLong());
 //        inOrder.verify(itemRequestRepository, never()).findAllByRequestorId(anyLong());
     }
-//
-    
+
     @Test
     @DisplayName("получены все запросы, созданные другими пользователями, " +
             "когда вызваны по умолчанию, то получен пустой список")
