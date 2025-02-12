@@ -164,11 +164,19 @@ class ItemControllerTest {
 //                .thenReturn(comment);
 //        when(bookingService.existPastApprovedItemBookingByUser(any(), any()))
 //                .thenReturn(true);
-        mockMvc.perform(post("/items/{id}/comment", itemDto1.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/items/{itemId}/comment/", itemDto1.getId())
                         .content(mapper.writeValueAsString(new CreateCommentRequest("text")))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
                 .andExpect(status().is4xxClientError());
+
+//        .content(mapper.writeValueAsString(itemDto1))
+//                .characterEncoding(StandardCharsets.UTF_8)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .accept(MediaType.APPLICATION_JSON)
+//                .header("X-Sharer-User-Id", userDto1.getId()))
 //                .andExpect(status().is2xxSuccessful())
 //                .andExpect(jsonPath("$.id", is(commentDto1.getId()), Long.class))
 //                .andExpect(jsonPath("$.text", is(commentDto1.getText())))
@@ -207,4 +215,15 @@ class ItemControllerTest {
                         .header("X-Sharer-User-Id", userDto1.getId()))
                 .andExpect(status().is4xxClientError());
     }
+
+//    @Test
+//    void saveCommentTest() throws Exception {
+//        mockMvc.perform(post("/items/{itemId}/comment", 1L)
+//                        .characterEncoding(StandardCharsets.UTF_8)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(new CreateCommentRequest("text")))
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .header("X-Sharer-User-Id", userDto1.getId()))
+//                .andExpect(status().is4xxClientError());
+//    }
 }

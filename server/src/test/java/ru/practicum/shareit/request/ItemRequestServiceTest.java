@@ -4,7 +4,9 @@ import org.hamcrest.Matchers;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Spy;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
@@ -13,6 +15,7 @@ import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dao.UserRepository;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -278,7 +281,16 @@ class ItemRequestServiceTest {
     @Test
     void mapper2Test() {
         Set<ItemDto> items = new HashSet<>();
-        items.add(new ItemDto());
+        items.add(new ItemDto(1L, "a", "b", true,
+                List.of(new CommentDto(1L, "text", "author", Instant.now())),
+                LocalDateTime.now(), LocalDateTime.now()));
         assertDoesNotThrow(() -> itemRequestMapper.toItemRequest(new ItemRequestDto(1L, "descr", Instant.now(), items), new User()));
+    }
+
+    @Test
+    void mapper3Test() {
+        Set<Item> items = new HashSet<>();
+        items.add(new Item());
+        assertDoesNotThrow(() -> itemRequestMapper.toDto(new ItemRequest(1L, "descr", new User(), Instant.now(), items)));
     }
 }

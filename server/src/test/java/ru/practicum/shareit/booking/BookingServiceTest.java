@@ -15,6 +15,7 @@ import ru.practicum.shareit.booking.dto.CreateBookingRequest;
 import ru.practicum.shareit.exception.BadRequest;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.request.ItemRequestService;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
@@ -24,7 +25,9 @@ import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -220,6 +223,56 @@ class BookingServiceTest {
         assertEquals(3,
                 bookingService.getUserBookings("ALL", user2.getId()).size());
     }
+
+    @Test
+    void getAllBookingByUserIdCURRENTTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerAndStartBeforeAndEndAfterOrderByStartAsc(any(), any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("CURRENT", user2.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByUserIdPASTTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerAndEndBeforeOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("PAST", user2.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByUserIdFUTURETest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerAndStartAfterOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("FUTURE", user2.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByUserIdWAITINGTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerAndStatusOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("WAITING", user2.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByUserIdREJECTEDTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByBookerAndStatusOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getUserBookings("REJECTED", user2.getId()).size());
+    }
 //
 //    @Test
 //    void getPastBookingByUserIdTest() throws NotFoundException {
@@ -273,6 +326,56 @@ class BookingServiceTest {
         assertEquals(3,
                 bookingService.getOwnerBookings("ALL", user.getId()).size());
     }
+
+    @Test
+    void getAllBookingByOwnerIdCURRENTTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllCurrentByOwnerOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("CURRENT", user.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByOwnerIdPASTTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllPastByOwnerOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("PAST", user.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByOwnerIdFUTURETest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllSortedOwnerBookings(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("FUTURE", user.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByOwnerIdWAITINGTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByOwnerAndStatusOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("WAITING", user.getId()).size());
+    }
+
+    @Test
+    void getAllBookingByOwnerIdREJECTEDTest() throws NotFoundException {
+        when(userService.getById(anyLong()))
+                .thenReturn(new User());
+        when(bookingRepository.findAllByOwnerAndStatusOrderByStartAsc(any(), any()))
+                .thenReturn(List.of(booking, bookingApprove, bookingReject));
+        assertEquals(3,
+                bookingService.getOwnerBookings("REJECTED", user.getId()).size());
+    }
 //
 //    @Test
 //    void getPastBookingByOwnerIdTest() throws NotFoundException {
@@ -324,7 +427,11 @@ class BookingServiceTest {
 
     @Test
     void getUserBookingsTest() {
-
+        Comment comment = new Comment(1L, "", new User(), new Item(), Instant.now());
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+        Item item = new Item(1L, user, "Дрель", "Простая дрель", true, comments , new ItemRequest(1));
+        assertDoesNotThrow(() -> bookingMapper.toItemDto(item));
     }
 
 //    @Test

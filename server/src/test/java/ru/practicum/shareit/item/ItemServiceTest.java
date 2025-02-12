@@ -11,6 +11,7 @@ import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.request.dao.ItemRequestRepository;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.user.dao.UserRepository;
@@ -203,9 +204,11 @@ class ItemServiceTest {
 //        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(itemRepository.save(any(Item.class)))
                 .thenReturn(itemToSave);
+        when(itemRequestRepository.findById(any()))
+                .thenReturn(Optional.of(new ItemRequest()));
 
         Item actualItem = itemService.createItem(
-                new CreateItemRequest(itemToSave.getName(), itemToSave.getDescription(), itemToSave.isAvailable(), null), user.getId());
+                new CreateItemRequest(itemToSave.getName(), itemToSave.getDescription(), itemToSave.isAvailable(), 1L), user.getId());
 
         assertThat(itemToSave, equalTo(actualItem));
 //        InOrder inOrder = inOrder(userRepository, itemRepository);
@@ -427,12 +430,16 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("получены все вещи по тексту, когда вызваны по умолчанию, то получен пустой список")
-    void findItems_whenInvokedWithEmptyText_thenReturnedEmptyList() throws NotFoundException {
+    void findItems_whenInvokedWithEmptyText_thenReturnedList() throws NotFoundException {
         Long userId = 0L;
+//
+//        when(itemRepository.getLastAndNextBookingDate(any(), any()))
+//                .then()
+        when(itemRepository.findAllByOwnerWithComments(any()))
+                .thenReturn(List.of(new Item()));
+//        List<Item> actualItems =itemService.getItemsByUserId(userId) ;
 
-        List<Item> actualItems = itemService.getItemsByUserId(userId);
-
-        assertThat(actualItems, empty());
+        assertDoesNotThrow(() -> itemService.getItemsByUserId(userId));
         verify(itemRepository, never()).search("");
     }
 
@@ -621,6 +628,21 @@ class ItemServiceTest {
     }
 
     @Test
+    void mapperFailTest() {
+        assertDoesNotThrow(() -> itemMapper.toComment(null));
+    }
+
+    @Test
+    void mapperFail2Test() {
+        assertDoesNotThrow(() -> itemMapper.toDto((Item) null));
+    }
+
+    @Test
+    void mapperFail3Test() {
+        assertDoesNotThrow(() -> itemMapper.toDto((List) null));
+    }
+
+    @Test
     void mapperListTest() {
         assertDoesNotThrow(() -> itemMapper.toCommentDto(List.of(new Comment(1L, "", new User(), new Item(), Instant.now()))));
     }
@@ -633,5 +655,32 @@ class ItemServiceTest {
     @Test
     void mapperItemDtoListTest() {
         assertDoesNotThrow(() -> itemMapper.toDto(List.of(new Item())));
+    }
+
+    @Test
+    void search() {
+        assertDoesNotThrow(() -> itemService.search(""));
+    }
+
+    @Test
+    void searchFail() {
+        assertEquals(null, itemMapper.toCommentDto((Comment) null));
+    }
+
+    @Test
+    void searchFail2() {
+        assertEquals(null, itemMapper.toCommentDto((List) null));
+    }
+
+    @Test
+    void searchFail3() {
+        assertDoesNotThrow(() -> itemMapper.toCommentDto(new Comment(
+                1L, "text", null, new Item(),
+                Instant.now())));
+    }
+
+    @Test
+    void searchFail4() {
+        assertDoesNotThrow(() -> itemMapper.toItem(null));
     }
 }

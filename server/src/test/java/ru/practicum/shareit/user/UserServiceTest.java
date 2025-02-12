@@ -56,6 +56,20 @@ public class UserServiceTest {
         assertDoesNotThrow(() -> userService.updateUser(user.getId(), new UpdateUserRequest("name", "email"))); // getuserMapper.toRequest(newUser)), newUser);
     }
 
+    @Test
+    void updateUserFailTest() throws ConflictException, NotFoundException {
+        User user = new User(1L, "name", "email");
+        User newUser = new User(2L, "newName", "newEmail");
+//        newUser = user;
+        when(userRepository.findById(anyLong()))
+                .thenReturn(Optional.of(user));
+//        when(userRepository.save(any()))
+//                .thenReturn(user);
+        when(userRepository.findByEmail(anyString()))
+                .thenReturn(Optional.of(newUser));
+        assertThrows(ConflictException.class, () -> userService.updateUser(user.getId(), new UpdateUserRequest("name", "email"))); // getuserMapper.toRequest(newUser)), newUser);
+    }
+
 //    @Test
 //    void updateUserTest() throws NotFoundException, ConflictException {
 ////        UserDto userDto = userService.getById(1L);
@@ -111,5 +125,26 @@ public class UserServiceTest {
     void getUserNotByIdTest() {
         final NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getById(123123L));
         assertEquals("Не найден пользователь с userId = 123123", exception.getMessage());
+    }
+
+    @Test
+    void getUserByIdNullTest() throws NotFoundException {
+//        when(userRepository.findById(anyLong()))
+//                .thenReturn(Optional.of(user1));
+        assertEquals(userMapper.toDto(null), null); // .getId(), userService.getById(1L).getId());
+    }
+
+    @Test
+    void getUserById33NullTest() throws NotFoundException {
+//        when(userRepository.findById(anyLong()))
+//                .thenReturn(Optional.of(user1));
+        assertEquals(userMapper.toRequest(null), null); // .getId(), userService.getById(1L).getId());
+    }
+
+    @Test
+    void getUserToIdNullTest() throws NotFoundException {
+//        when(userRepository.findById(anyLong()))
+//                .thenReturn(Optional.of(user1));
+        assertEquals(userMapper.toUser(null), null); // .getId(), userService.getById(1L).getId());
     }
 }

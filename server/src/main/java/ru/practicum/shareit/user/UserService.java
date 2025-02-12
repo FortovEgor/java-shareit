@@ -76,6 +76,7 @@ public class UserService {
         AtomicBoolean throwException = new AtomicBoolean(false);
         repo.findByEmail(email)
                 .ifPresent(existingUser -> {
+                    log.info("AAAAAAAAA");
                     if (!existingUser.getId().equals(userId)) {
                         throwException.set(true);
                     }

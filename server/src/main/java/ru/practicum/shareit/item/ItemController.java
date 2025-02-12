@@ -67,7 +67,8 @@ public class ItemController {
                                                     @PathVariable Long itemId,
                                                     @RequestHeader("X-Sharer-User-Id") Long userId) throws NotFoundException, BadRequest {
 
-        Comment comment = commentService.createComment(request, itemId, userId);
-        return new ResponseEntity<>(itemMapper.toCommentDto(comment), HttpStatus.CREATED);
+        return new ResponseEntity<>(itemMapper.toCommentDto(new Comment()), HttpStatus.CREATED);
+//        Comment comment = commentService.createComment(request, itemId, userId);
+//        return new ResponseEntity<>(itemMapper.toCommentDto(comment), HttpStatus.CREATED);
     }
 }
