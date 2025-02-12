@@ -16,8 +16,8 @@ import ru.practicum.shareit.user.dto.UserDto;
 @RequestMapping(path = "/users")
 public class UserController {
 
-    private final UserService userService;
     private final UserMapper userMapper;
+    private final UserService userService;
 
     @PostMapping
     public UserDto createUser(@RequestBody CreateUserRequest request) throws ConflictException {
