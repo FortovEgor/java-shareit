@@ -48,7 +48,6 @@ class UserControllerTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(userController)
                 .build();
-//        bookingDto = new BookingDto(1L, LocalDateTime.now(), LocalDateTime.now(), itemMapper.toDto(item), new UserDto(), BookingStatus.WAITING);
     }
 
     @Test
@@ -64,9 +63,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName()), String.class))
                 .andExpect(jsonPath("$.email", is(user.getEmail()), String.class));
-
-//        verify(userService, times(1))
-//                .createUser(any(UserDto.class));
     }
 
     @Test
@@ -82,9 +78,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName()), String.class))
                 .andExpect(jsonPath("$.email", is(user.getEmail()), String.class));
-
-//        verify(userService, times(1))
-//                .updateUser(any(UserDto.class), anyInt());
     }
 
     @Test
@@ -99,22 +92,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(user.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(user.getName()), String.class))
                 .andExpect(jsonPath("$.email", is(user.getEmail()), String.class));
-
-//        verify(userService, times(1))
-//                .getUserById(user.getId());
     }
-
-//    @Test
-//    void getAllUsersTest() throws Exception {
-//        when(userService.get())
-//                .thenReturn(Collections.emptyList());
-//        mockMvc.perform(get("/users"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json("[]"));
-//
-//        verify(userService, times(1))
-//                .getAllUsers();
-//    }
 
     @Test
     void deleteUserTest() throws Exception {
@@ -123,8 +101,5 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-
-//        verify(userService, times(1))
-//                .delete(user.getId());
     }
 }

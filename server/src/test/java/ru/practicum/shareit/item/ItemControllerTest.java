@@ -72,7 +72,6 @@ class ItemControllerTest {
         mockMvc = MockMvcBuilders
                 .standaloneSetup(itemController)
                 .build();
-//        bookingDto = new BookingDto(1L, LocalDateTime.now(), LocalDateTime.now(), itemMapper.toDto(item), new UserDto(), BookingStatus.WAITING);
     }
 
     @Test
@@ -91,9 +90,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name", is(itemDto1.getName()), String.class))
                 .andExpect(jsonPath("$.description", is(itemDto1.getDescription()), String.class))
                 .andExpect(jsonPath("$.available", is(itemDto1.isAvailable()), Boolean.class));
-
-//        verify(itemService, times(1))
-//                .create(anyInt(), any());
     }
 
     @Test
@@ -113,9 +109,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name", is(itemDto1.getName()), String.class))
                 .andExpect(jsonPath("$.description", is(itemDto1.getDescription()), String.class))
                 .andExpect(jsonPath("$.available", is(itemDto1.isAvailable()), Boolean.class));
-
-//        verify(itemService, times(1))
-//                .update(anyInt(), any(), anyInt());
     }
 
     @Test
@@ -131,9 +124,6 @@ class ItemControllerTest {
                 .andExpect(jsonPath("$.name", is(itemDtoWithBooking.getName()), String.class))
                 .andExpect(jsonPath("$.description", is(itemDtoWithBooking.getDescription()), String.class))
                 .andExpect(jsonPath("$.available", is(itemDtoWithBooking.isAvailable()), Boolean.class));
-
-//        verify(itemService, times(1))
-//                .getItemById(itemDto1.getId(), userDto1.getId());
     }
 
     @Test
@@ -151,19 +141,12 @@ class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(itemDto1.getId()), Long.class))
                 .andExpect(jsonPath("$[0].name", is(itemDto1.getName()), String.class));
-
-//        verify(itemService, times(1))
-//                .searchItemByQuery(anyString());
     }
 
     @Test
     void addIncorrectCommentTest() throws Exception {
         Comment comment = new Comment(commentDto1.getId(), commentDto1.getText(),
                 new User(100L, commentDto1.getAuthorName(), "email"), new Item(), Instant.now());
-//        when(commentService.createComment(any(), anyLong(), anyLong()))
-//                .thenReturn(comment);
-//        when(bookingService.existPastApprovedItemBookingByUser(any(), any()))
-//                .thenReturn(true);
         mockMvc.perform(post("/items/{itemId}/comment/", itemDto1.getId())
                         .content(mapper.writeValueAsString(new CreateCommentRequest("text")))
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -171,26 +154,11 @@ class ItemControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
                 .andExpect(status().is2xxSuccessful());
-
-//        .content(mapper.writeValueAsString(itemDto1))
-//                .characterEncoding(StandardCharsets.UTF_8)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .header("X-Sharer-User-Id", userDto1.getId()))
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect(jsonPath("$.id", is(commentDto1.getId()), Long.class))
-//                .andExpect(jsonPath("$.text", is(commentDto1.getText())))
-//                .andExpect(jsonPath("$.authorName", is(userDto1.getName())));
     }
 
     @Test
     void createCommentNotFoundTest() throws Exception {
         Item item = new Item(itemDto1.getId(), new User(), itemDto1.getName(), itemDto1.getDescription(), itemDto1.isAvailable(), null, new ItemRequest());
-//        when(itemService.getById(anyLong()))
-//                .thenReturn(item);
-//        User user = new User(1L, "name", "email");
-//        when(userService.getById(anyLong()))
-//                .thenReturn(user);
 
         mockMvc.perform(post("/items/{itemId}/comment", item.getId())
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -199,10 +167,6 @@ class ItemControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
                 .andExpect(status().is2xxSuccessful());
-//                .andExpect(jsonPath("$.id", is(itemDto1.getId()), Long.class));
-//                .andExpect(jsonPath("$.name", is(itemDto1.getName()), String.class))
-//                .andExpect(jsonPath("$.description", is(itemDto1.getDescription()), String.class))
-//                .andExpect(jsonPath("$.available", is(itemDto1.isAvailable()), Boolean.class));
     }
 
     @Test
@@ -215,15 +179,4 @@ class ItemControllerTest {
                         .header("X-Sharer-User-Id", userDto1.getId()))
                 .andExpect(status().is2xxSuccessful());
     }
-
-//    @Test
-//    void saveCommentTest() throws Exception {
-//        mockMvc.perform(post("/items/{itemId}/comment", 1L)
-//                        .characterEncoding(StandardCharsets.UTF_8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(mapper.writeValueAsString(new CreateCommentRequest("text")))
-//                        .accept(MediaType.APPLICATION_JSON)
-//                        .header("X-Sharer-User-Id", userDto1.getId()))
-//                .andExpect(status().is4xxClientError());
-//    }
 }

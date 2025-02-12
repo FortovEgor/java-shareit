@@ -42,7 +42,6 @@ public class UserServiceTest {
         when(userRepository.save(any()))
                 .thenReturn(newUser);
         assertEquals(userService.createUser(userMapper.toRequest(newUser)), newUser);
-//                userService.getById(newUser.getId()).getId(), user1.getId());
     }
 
     @Test
@@ -60,35 +59,12 @@ public class UserServiceTest {
     void updateUserFailTest() throws ConflictException, NotFoundException {
         User user = new User(1L, "name", "email");
         User newUser = new User(2L, "newName", "newEmail");
-//        newUser = user;
         when(userRepository.findById(anyLong()))
                 .thenReturn(Optional.of(user));
-//        when(userRepository.save(any()))
-//                .thenReturn(user);
         when(userRepository.findByEmail(anyString()))
                 .thenReturn(Optional.of(newUser));
         assertThrows(ConflictException.class, () -> userService.updateUser(user.getId(), new UpdateUserRequest("name", "email"))); // getuserMapper.toRequest(newUser)), newUser);
     }
-
-//    @Test
-//    void updateUserTest() throws NotFoundException, ConflictException {
-////        UserDto userDto = userService.getById(1L);
-////        userDto.setName("test");
-////        userDto.setEmail("test@test.ru");
-//        User newUser = new User();
-//        when(userRepository.getById(anyLong()))
-//                        .thenReturn(newUser);
-//        when(userService.getById(anyLong()))
-//                .thenReturn(newUser);
-//        User changedUser = new User(newUser.getId(), "changed_name", "changed_email");
-//        when(userRepository.save(any()))
-//                .thenReturn(changedUser);
-////        userService.createUser(userMapper.toRequest(user1));
-//        User answer = userService.updateUser(1L, new UpdateUserRequest("test", "email"));
-//        assertEquals("changed_name", answer.getName());
-//        assertEquals("changed_email", answer.getEmail());
-////        assertEquals("test@test.ru", userService.getById(1L).getEmail());
-//    }
 
     @Test
     void getUserByIdTest() throws NotFoundException {
@@ -109,17 +85,9 @@ public class UserServiceTest {
         when(userRepository.findByEmail(anyString()))
                 .thenReturn(Optional.ofNullable(user1));
         CreateUserRequest request = new CreateUserRequest(user1.getName(), user1.getEmail());
-//        userService.createUser(request);  // UserMapper.toUserDto(user2));
         final ConflictException exception = assertThrows(ConflictException.class, () -> userService.createUser(request));
         assertEquals("пользователь с почтой user1@mail.ru уже зарегистрирован", exception.getMessage());
     }
-
-//    @Test
-//    void createUserWithNullEmailTest() {
-////        User user4 = new User(4, "user4", null);
-//        final ValidationException exception = assertThrows(ValidationException.class, () -> userService.createUser(new CreateUserRequest(null, null)));
-//        assertEquals("Email not found", exception.getMessage());
-//    }
 
     @Test
     void getUserNotByIdTest() {
@@ -129,22 +97,16 @@ public class UserServiceTest {
 
     @Test
     void getUserByIdNullTest() throws NotFoundException {
-//        when(userRepository.findById(anyLong()))
-//                .thenReturn(Optional.of(user1));
         assertEquals(userMapper.toDto(null), null); // .getId(), userService.getById(1L).getId());
     }
 
     @Test
     void getUserById33NullTest() throws NotFoundException {
-//        when(userRepository.findById(anyLong()))
-//                .thenReturn(Optional.of(user1));
         assertEquals(userMapper.toRequest(null), null); // .getId(), userService.getById(1L).getId());
     }
 
     @Test
     void getUserToIdNullTest() throws NotFoundException {
-//        when(userRepository.findById(anyLong()))
-//                .thenReturn(Optional.of(user1));
         assertEquals(userMapper.toUser(null), null); // .getId(), userService.getById(1L).getId());
     }
 }

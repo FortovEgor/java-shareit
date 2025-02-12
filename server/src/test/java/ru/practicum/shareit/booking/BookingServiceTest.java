@@ -72,45 +72,6 @@ class BookingServiceTest {
     private Booking bookingReject = new Booking(3L, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
             item, user2, BookingStatus.REJECTED);
 
-//    @Autowired
-//    public BookingServiceTest(BookingRepository bookingRepository,
-//                              BookingService bookingService,
-//                              ItemService itemService,
-//                              ItemRequestService itemRequestService,
-//                              UserService userService) throws ConflictException, NotFoundException {
-//        this.bookingRepository = bookingRepository;
-//        this.bookingService = bookingService;
-//
-//    }
-
-//    @BeforeEach
-//    void setup() {
-//        user = new User(1L, "user1", "user1@mail.ru");
-//        user2 = new User(2L, "user2", "user2@mail.ru");
-//        item = new Item(1L, user, "Дрель", "Простая дрель", true, null, new ItemRequest(1));
-//        booking = new Booking(1L, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1),
-//                item, user2, BookingStatus.WAITING);
-//        bookingApprove = new Booking(2L, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-//                item, user2, BookingStatus.APPROVED);
-//        bookingApprove = new Booking(2L, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-//                item, user2, BookingStatus.APPROVED);
-//        bookingReject = new Booking(3L, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
-//                item, user2, BookingStatus.REJECTED);
-//        try {
-//            userService.createUser(new CreateUserRequest(user.getName(), user.getEmail()));
-//            userService.createUser(new CreateUserRequest(user2.getName(), user2.getEmail()));
-//            itemRequestService.createItemRequest(new ItemRequestDto(1L, "test Request", Instant.now(), null), user.getId());
-//            itemService.createItem(new CreateItemRequest(item.getName(), item.getDescription(), item.isAvailable(),
-//                    (item.getRequest() == null) ? null : item.getRequest().getId()), user.getId());
-//            bookingRepository.save(booking);
-//            bookingRepository.save(bookingApprove);
-//            bookingRepository.save(bookingReject);
-//            List<Booking> all = bookingRepository.findAll();
-//            log.info("ALL after saving: " + all.size());
-//        } catch (Exception ignored) { }
-//    }
-
-
     @Test
     void getBookingByIdTest() throws ForbiddenException, NotFoundException {
         when(bookingRepository.findById(anyLong()))
@@ -151,13 +112,6 @@ class BookingServiceTest {
                         LocalDateTime.now().plusDays(2)), 2));
     }
 
-//    @Test
-//    void createBookingEndInThePastTest() {
-//        assertThrows(BadRequest.class, () -> bookingService.createBooking(
-//                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
-//                        LocalDateTime.now().minusDays(2)), 2));
-//    }
-//
     @Test
     void createBookingAvailableTest() throws NotFoundException {
         when(itemService.getById(any(Long.class)))
@@ -166,45 +120,13 @@ class BookingServiceTest {
                 new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
                         LocalDateTime.now().plusDays(2)), 1));
     }
-//
-//    @Test
-//    void createBookingByOwnerTest() {
-//        assertThrows(BadRequest.class, () -> bookingService.createBooking(
-//                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
-//                        LocalDateTime.now().plusDays(2)), 1));
-//    }
-//
 
     @Test
     void updateBookingTest() {
         when(bookingRepository.findById(anyLong()))
                 .thenReturn(Optional.ofNullable(booking));
         assertDoesNotThrow(() -> bookingService.approveBooking(booking.getId(), true, user.getId()));
-//        assertEquals(BookingStatus.APPROVED, bookingRepository.findById(booking.getId()).orElseThrow().getStatus());
     }
-//
-//    @Test
-//    void updateBooking2Test() throws ForbiddenException, NotFoundException {
-//        bookingService.approveBooking(booking.getId(), false, user.getId());
-//        assertEquals(BookingStatus.REJECTED, bookingRepository.findById(booking.getId()).orElseThrow().getStatus());
-//    }
-//
-//    @Test
-//    void updateBookingAlreadyApprovedTest() {
-//        when(bookingRepository.findById(anyLong()))
-//                .thenReturn(Optional.ofNullable(bookingApprove));
-//        assertThrows(NotFoundException.class, () -> bookingService
-//                .approveBooking(bookingApprove.getId(), true, user.getId()));
-//    }
-//
-//    @Test
-//    void updateBookingAlreadyRejectedTest() {
-//        when(bookingRepository.findById(anyLong()))
-//                .thenReturn(Optional.ofNullable(bookingReject));
-//        assertThrows(NotFoundException.class, () -> bookingService
-//                .approveBooking(bookingReject.getId(), true, user.getId()));
-//    }
-//
 
     @Test
     void updateBookingApprovedByNotOwnerTest() {
@@ -273,49 +195,6 @@ class BookingServiceTest {
         assertEquals(3,
                 bookingService.getUserBookings("REJECTED", user2.getId()).size());
     }
-//
-//    @Test
-//    void getPastBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(new ArrayList<>(),
-//                bookingService.getUserBookings("PAST", user2.getId()));
-//    }
-//
-//    @Test
-//    void getFutureBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(new ArrayList<>(),
-//                bookingService.getUserBookings("FUTURE", user2.getId()));
-//    }
-//
-//    @Test
-//    void getCurrentBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(3,
-//                bookingService.getUserBookings("CURRENT", user2.getId()).size());
-//    }
-//
-//    @Test
-//    void getWaitingBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(List.of(booking).get(0).getId(),
-//                bookingService.getUserBookings("WAITING", user2.getId()).get(0).getId());
-//    }
-//
-//    @Test
-//    void getRejectedBookingByUserIdTest() throws NotFoundException {
-//        assertEquals(List.of(bookingReject).get(0).getId(),
-//                bookingService.getUserBookings("REJECTED", user2.getId()).get(0).getId());
-//    }
-//
-////    @Test
-////    void getAllBookingByUserIdNegativeTest() {
-////        assertThrows(IllegalArgumentException.class, () -> bookingService
-////                .getUserBookings("ALL", user2.getId()));
-////    }
-//
-//    @Test
-//    void getAllBookingByUserIdBadWithoutBookingTest() {
-//        assertThrows(IllegalArgumentException.class, () -> bookingService
-//                .getOwnerBookings("BAD_STATE", user2.getId()).get(0).getId());
-//    }
-//
 
     @Test
     void getAllBookingByOwnerIdTest() throws NotFoundException {
@@ -376,54 +255,6 @@ class BookingServiceTest {
         assertEquals(3,
                 bookingService.getOwnerBookings("REJECTED", user.getId()).size());
     }
-//
-//    @Test
-//    void getPastBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(new ArrayList<>(),
-//                bookingService.getOwnerBookings("PAST", user.getId()));
-//    }
-//
-//    @Test
-//    void getFutureBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(new ArrayList<>(),
-//                bookingService.getOwnerBookings("FUTURE", user.getId()));
-//    }
-//
-//    @Test
-//    void getCurrentBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(3,
-//                bookingService.getOwnerBookings("CURRENT", user.getId()).size());
-//    }
-//
-//    @Test
-//    void getWaitingBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(List.of(booking).get(0).getId(),
-//                bookingService.getOwnerBookings("WAITING", user.getId()).get(0).getId());
-//    }
-//
-//    @Test
-//    void getRejectedBookingByOwnerIdTest() throws NotFoundException {
-//        assertEquals(List.of(bookingReject).get(0).getId(),
-//                bookingService.getOwnerBookings("REJECTED", user.getId()).get(0).getId());
-//    }
-//
-////    @Test
-////    void getAllBookingByOwnerIdNegativeTest() {
-////        assertThrows(NotFoundException.class, () -> bookingService
-////                .getOwnerBookings("ALL", user.getId()));
-////    }
-//
-//    @Test
-//    void getAllBookingByOwnerIdBadStateTest() {
-//        assertThrows(IllegalArgumentException.class, () -> bookingService
-//                .getOwnerBookings("BAD_STATE", user.getId()).get(0).getId());
-//    }
-//
-//    @Test
-//    void getAllBookingByOwnerIdNullStateTest() throws NotFoundException {
-//        assertThrows(NullPointerException.class,
-//                () -> bookingService.getOwnerBookings(null, user.getId()).size());
-//    }
 
     @Test
     void getUserBookingsTest() {
@@ -449,9 +280,4 @@ class BookingServiceTest {
                         new User(1L, "a", "b"), BookingStatus.APPROVED)));
         assertThrows(ForbiddenException.class, () -> bookingService.getById(1L, 2L));
     }
-
-//    @Test
-//    void mapperTest() {
-//        bookingMapper.commentToCommentDto()
-//    }
 }
