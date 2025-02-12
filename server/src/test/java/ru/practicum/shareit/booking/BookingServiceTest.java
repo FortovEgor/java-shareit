@@ -23,6 +23,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.user.UserMapper;
 import ru.practicum.shareit.user.UserService;
+
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -59,7 +61,7 @@ class BookingServiceTest {
     private User user = new User(1L, "user1", "user1@mail.ru");
     private User user2 = new User(2L, "user2", "user2@mail.ru");
     private Item item = new Item(1L, user, "Дрель", "Простая дрель", true, null, new ItemRequest(1));
-//    private final Item itemNotAvailable = new Item(1L, user, "Дрель", "Непростая дрель", false, null, null);
+    private final Item itemNotAvailable = new Item(1L, user, "Дрель", "Непростая дрель", false, null, null);
     private Booking booking = new Booking(1L, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1),
             item, user2, BookingStatus.WAITING);
     private Booking bookingApprove = new Booking(2L, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
@@ -120,59 +122,62 @@ class BookingServiceTest {
     }
 
     @Test
-    void createBookingTest() throws BadRequest, NotFoundException {
+    void createBookingTest() throws NotFoundException {
         when(itemService.getById(any(Long.class)))
                 .thenReturn(item);
         assertDoesNotThrow(() -> bookingService.createBooking(new CreateBookingRequest(
                 1L, LocalDateTime.now().plusMinutes(1), LocalDateTime.now().plusDays(2)), 2));
     }
-//
-//    @Test
-//    void createBookingStartInThePastTest() {
-//        BookingDto bookingDto = BookingDto.builder()
-//                .start(LocalDateTime.now().minusDays(1))
-//                .end(LocalDateTime.now().plusDays(2))
-//                .item(new ItemDto())
-//                .build();
-//
-//        assertThrows(ConstraintViolationException.class, () -> bookingService.createBooking(
-//                new CreateBookingRequest(1L, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(2)),
-//                2));
-//    }
-//
-//    @Test
-//    void createBookingStartAfterEndTest() {
-//        assertThrows(BadRequest.class, () -> bookingService.createBooking(
-//                new CreateBookingRequest(1L, LocalDateTime.now().plusDays(10),
-//                        LocalDateTime.now().plusDays(2)), 2));
-//    }
-//
+
+    @Test
+    void createBookingEqualDatesTest() throws NotFoundException {
+        when(itemService.getById(any(Long.class)))
+                .thenReturn(item);
+        LocalDateTime now = LocalDateTime.now().plusDays(2);
+        assertThrows(BadRequest.class, () -> bookingService.createBooking(
+                new CreateBookingRequest(1L, now, now),
+                2));
+    }
+
+    @Test
+    void createBookingStartAfterEndTest() throws NotFoundException {
+        when(itemService.getById(any(Long.class)))
+                .thenReturn(item);
+        assertThrows(BadRequest.class, () -> bookingService.createBooking(
+                new CreateBookingRequest(1L, LocalDateTime.now().plusDays(10),
+                        LocalDateTime.now().plusDays(2)), 2));
+    }
+
 //    @Test
 //    void createBookingEndInThePastTest() {
-//        assertThrows(ConstraintViolationException.class, () -> bookingService.createBooking(
+//        assertThrows(BadRequest.class, () -> bookingService.createBooking(
 //                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
 //                        LocalDateTime.now().minusDays(2)), 2));
 //    }
 //
-//    @Test  /////////////////////////////////
-//    void createBookingAvailableTest() {
-//        assertDoesNotThrow(() -> bookingService.createBooking(
+    @Test
+    void createBookingAvailableTest() throws NotFoundException {
+        when(itemService.getById(any(Long.class)))
+                .thenReturn(itemNotAvailable);
+        assertThrows(BadRequest.class, () -> bookingService.createBooking(
+                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
+                        LocalDateTime.now().plusDays(2)), 1));
+    }
+//
+//    @Test
+//    void createBookingByOwnerTest() {
+//        assertThrows(BadRequest.class, () -> bookingService.createBooking(
 //                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
 //                        LocalDateTime.now().plusDays(2)), 1));
 //    }
 //
-////    @Test
-////    void createBookingByOwnerTest() {
-////        assertThrows(BadRequest.class, () -> bookingService.createBooking(
-////                new CreateBookingRequest(1L, LocalDateTime.now().plusMinutes(1),
-////                        LocalDateTime.now().plusDays(2)), 1));
-////    }
-//
-//    @Test
-//    void updateBookingTest() throws ForbiddenException, NotFoundException {
-//        bookingService.approveBooking(booking.getId(), true, user.getId());
+    @Test
+    void updateBookingTest() throws ForbiddenException, NotFoundException {
+        when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.ofNullable(booking));
+        assertDoesNotThrow(() -> bookingService.approveBooking(booking.getId(), true, user.getId()));
 //        assertEquals(BookingStatus.APPROVED, bookingRepository.findById(booking.getId()).orElseThrow().getStatus());
-//    }
+    }
 //
 //    @Test
 //    void updateBooking2Test() throws ForbiddenException, NotFoundException {
@@ -180,24 +185,30 @@ class BookingServiceTest {
 //        assertEquals(BookingStatus.REJECTED, bookingRepository.findById(booking.getId()).orElseThrow().getStatus());
 //    }
 //
-////    @Test
-////    void updateBookingAlreadyApprovedTest() {
-////        assertThrows(NotFoundException.class, () -> bookingService
-////                .approveBooking(bookingApprove.getId(), true, user.getId()));
-////    }
-//
-////    @Test
-////    void updateBookingAlreadyRejectedTest() {
-////        assertThrows(NotFoundException.class, () -> bookingService
-////                .approveBooking(bookingReject.getId(), true, user.getId()));
-////    }
-//
 //    @Test
-//    void updateBookingApprovedByNotOwnerTest() {
-//        assertThrows(ForbiddenException.class, () -> bookingService
-//                .approveBooking(booking.getId(), true, user2.getId()));
+//    void updateBookingAlreadyApprovedTest() {
+//        when(bookingRepository.findById(anyLong()))
+//                .thenReturn(Optional.ofNullable(bookingApprove));
+//        assertThrows(NotFoundException.class, () -> bookingService
+//                .approveBooking(bookingApprove.getId(), true, user.getId()));
 //    }
 //
+//    @Test
+//    void updateBookingAlreadyRejectedTest() {
+//        when(bookingRepository.findById(anyLong()))
+//                .thenReturn(Optional.ofNullable(bookingReject));
+//        assertThrows(NotFoundException.class, () -> bookingService
+//                .approveBooking(bookingReject.getId(), true, user.getId()));
+//    }
+//
+    @Test
+    void updateBookingApprovedByNotOwnerTest() {
+        when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.ofNullable(booking));
+        assertThrows(ForbiddenException.class, () -> bookingService
+                .approveBooking(booking.getId(), true, user2.getId()));
+    }
+
 //    @Test
 //    void getAllBookingByUserIdTest() throws NotFoundException {
 //        assertEquals(3,
