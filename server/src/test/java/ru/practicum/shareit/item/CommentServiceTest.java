@@ -10,14 +10,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.dao.CommentRepository;
-import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.CreateCommentRequest;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.ArgumentMatchers.any;

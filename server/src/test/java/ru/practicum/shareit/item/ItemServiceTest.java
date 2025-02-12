@@ -1,11 +1,9 @@
 package ru.practicum.shareit.item;
 
-import org.hamcrest.MatcherAssert;
 import org.mapstruct.factory.Mappers;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
