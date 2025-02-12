@@ -1,10 +1,8 @@
 package ru.practicum.shareit.booking;
 
 import jakarta.validation.ConstraintViolationException;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,9 +83,7 @@ class BookingServiceTest {
             bookingRepository.save(booking);
             bookingRepository.save(bookingApprove);
             bookingRepository.save(bookingReject);
-        } catch (Exception e) {
-
-        }
+        } catch (Exception ignored) { }
     }
 
     @BeforeEach
