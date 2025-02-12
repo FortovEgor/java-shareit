@@ -263,6 +263,7 @@ class BookingServiceTest {
 //                .getOwnerBookings("BAD_STATE", user2.getId()).get(0).getId());
 //    }
 //
+
     @Test
     void getAllBookingByOwnerIdTest() throws NotFoundException {
         when(userService.getById(anyLong()))
@@ -320,6 +321,7 @@ class BookingServiceTest {
 //        assertThrows(NullPointerException.class,
 //                () -> bookingService.getOwnerBookings(null, user.getId()).size());
 //    }
+
     @Test
     void getUserBookingsTest() {
 
