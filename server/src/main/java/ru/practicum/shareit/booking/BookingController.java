@@ -44,7 +44,10 @@ public class BookingController {
     public BookingDto getBooking(@PathVariable Long bookingId,
                                  @RequestHeader(value = "X-Sharer-User-Id", required = true) Long userId) throws ForbiddenException, NotFoundException {
         Booking booking = bookingService.getById(bookingId, userId);
-        return mapper.toDto(booking);
+        log.info("Booking: " + booking);
+        var res = mapper.toDto(booking);
+        log.info("Res: " + res);
+        return res;
     }
 
     @GetMapping()

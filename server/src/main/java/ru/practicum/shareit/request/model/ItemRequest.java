@@ -39,4 +39,7 @@ public class ItemRequest {
     @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
     private Set<Item> items = new HashSet<>();
 
+    public ItemRequest(long id) {
+        this.id = id;
+    }
 }
