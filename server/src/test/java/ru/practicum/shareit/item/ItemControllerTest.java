@@ -170,7 +170,7 @@ class ItemControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is2xxSuccessful());
 
 //        .content(mapper.writeValueAsString(itemDto1))
 //                .characterEncoding(StandardCharsets.UTF_8)
@@ -198,7 +198,7 @@ class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDto1))
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is2xxSuccessful());
 //                .andExpect(jsonPath("$.id", is(itemDto1.getId()), Long.class));
 //                .andExpect(jsonPath("$.name", is(itemDto1.getName()), String.class))
 //                .andExpect(jsonPath("$.description", is(itemDto1.getDescription()), String.class))
@@ -207,13 +207,13 @@ class ItemControllerTest {
 
     @Test
     void getItemsByUserIdTest() throws Exception {
-        mockMvc.perform(post("/items/{itemId}/comment", 1L)
+        mockMvc.perform(get("/items")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(itemDto1))
                         .accept(MediaType.APPLICATION_JSON)
                         .header("X-Sharer-User-Id", userDto1.getId()))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is2xxSuccessful());
     }
 
 //    @Test

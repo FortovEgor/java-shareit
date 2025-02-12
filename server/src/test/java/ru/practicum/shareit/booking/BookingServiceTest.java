@@ -435,6 +435,21 @@ class BookingServiceTest {
         assertDoesNotThrow(() -> bookingMapper.toItemDto(item));
     }
 
+    @Test
+    void justTest() {
+        assertDoesNotThrow(() -> bookingService.existPastApprovedItemBookingByUser(new Item(), new User()));
+    }
+
+    @Test
+    void getByIdTest() {
+        when(bookingRepository.findById(anyLong()))
+                .thenReturn(Optional.of(new Booking(1L, LocalDateTime.now(), LocalDateTime.now(),
+                        new Item(1L, user, "Дрель",
+                                "Непростая дрель", false, null, null),
+                        new User(1L, "a", "b"), BookingStatus.APPROVED)));
+        assertThrows(ForbiddenException.class, () -> bookingService.getById(1L, 2L));
+    }
+
 //    @Test
 //    void mapperTest() {
 //        bookingMapper.commentToCommentDto()

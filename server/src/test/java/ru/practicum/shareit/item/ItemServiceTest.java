@@ -1,8 +1,10 @@
 package ru.practicum.shareit.item;
 
 import org.mapstruct.factory.Mappers;
+import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.exception.ForbiddenException;
+import ru.practicum.shareit.item.dto.CreateCommentRequest;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Comment;
@@ -60,13 +62,14 @@ class ItemServiceTest {
     @DisplayName("получены все вещи, когда вызваны по умолчанию, то получен пустой список")
     void getAllItemsByUser_whenInvoked_thenReturnedNotEmptyList() throws NotFoundException {
         Long userId = 0L;
+        Item item = new Item(1L, new User(), "f", "d",
+                true, null, new ItemRequest());
         when(userService.getById(anyLong()))
                 .thenReturn(new User(userId, "name", "email"));
         when(itemRepository.findAllByOwnerWithComments(any()))
-                .thenReturn(List.of(new Item(), new Item()));
+                .thenReturn(List.of(item, new Item()));
 
         List<Item> actualItems = itemService.getItemsByUserId(userId);
-
 
         assertThat(actualItems.size(), equalTo(2));
         verify(itemRepository, never()).findById(anyLong());
@@ -343,7 +346,7 @@ class ItemServiceTest {
 
     @Test
     @DisplayName("обновлена вещь, когда вещь не найдена, тогда выбрасывается исключение")
-    void updateItem_whenItemNotFound_thenExceptionThrown() {
+    void updateItemTestd() {
         Long userId = 0L;
         Long itemId = 0L;
         when(itemRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -356,6 +359,7 @@ class ItemServiceTest {
         verify(userRepository, never()).findById(userId);
         verify(itemRepository, never()).saveAndFlush(any(Item.class));
     }
+
 //
 //    @Test
 //    @DisplayName("обновлена вещь, когда пользователь не является владельцем вещи, " +
@@ -486,6 +490,18 @@ class ItemServiceTest {
         when(userService.getById(anyLong()))
                 .thenReturn(user);
         assertDoesNotThrow(() -> itemService.deleteById(item.getId(), user.getId()));
+    }
+
+    @Test
+    void deleteByIdFailTest() throws NotFoundException {
+        User user = new User(1L, "name", "email");
+        User second = new User(2L, "name", "email");
+        Item item = new Item(1L, user, "a", "b", true, null, null);
+        when(itemRepository.findById(any()))
+                .thenReturn(Optional.of(item));
+        when(userService.getById(anyLong()))
+                .thenReturn(second);
+        assertThrows(ForbiddenException.class, () -> itemService.deleteById(item.getId(), user.getId()));
     }
 
 
@@ -660,6 +676,12 @@ class ItemServiceTest {
     @Test
     void search() {
         assertDoesNotThrow(() -> itemService.search(""));
+    }
+
+    @Test void search22() {
+        when(itemRepository.search(anyString()))
+                .thenReturn((List<Item>) new Item());
+        assertDoesNotThrow(() -> itemService.search("111"));
     }
 
     @Test
