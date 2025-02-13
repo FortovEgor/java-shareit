@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
-import javax.validation.constraints.NotEmpty;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +11,13 @@ public class ItemDto {
 
     private Long id;
 
-    @NotEmpty(message = "Ошибка! Краткое название вещи не может быть пустым.")
+    @NotBlank(message = "Название вещи должно быть задано")
     private String name;
 
-    @NotEmpty(message = "Ошибка! Развёрнутое описание вещи не может быть пустым.")
+    @NotBlank(message = "Ошибка! Развёрнутое описание вещи не может быть пустым.")
     private String description;
 
+    @NotNull(message = "Должно быть указано, дсотупна ли вещь для аренды")
     private Boolean available;
 
     private Long requestId;
