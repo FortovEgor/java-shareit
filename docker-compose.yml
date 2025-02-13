@@ -1,13 +1,21 @@
 services:
+  gateway:
+    build: gateway
+    image: shareit-gateway
+    container_name: shareit-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    environment:
+      - SHAREIT_SERVER_URL=http://server:9090
+
   server:
-    build:
-      # контекст - корневая папка репозитория (т. к. относительно ее прописаны все пути в Dockefile)
-      context: .
-      dockerfile: ./docker/Dockerfile
+    build: server
     image: shareit-server
     container_name: shareit-server
     ports:
-      - "8080:8080"
+      - "9090:9090"
     depends_on:
       - db
     environment:
@@ -17,7 +25,7 @@ services:
 
   db:
     image: postgres:16.1
-    container_name: postgresForShareIt
+    container_name: postgres
     ports:
       - "6541:5432"
     environment:
